@@ -1,0 +1,11 @@
+images/_backup_checkered/
+images/_preview_transparent/
+images/_preview_whitebg/
+images/_preview_compare/
+
+# Claude Code local state
+.claude/
+
+# Local experimental scripts
+_mapping.py
+_mapping.json
