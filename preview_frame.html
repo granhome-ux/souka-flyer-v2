@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Block 1 Prototype</title>
+<style>
+  @font-face {
+    font-family: 'RiiCookieR';
+    src: url('fonts/RiiCookieR.woff2') format('woff2'),
+         url('fonts/RiiCookieR.woff') format('woff'),
+         url('fonts/RiiCookieR.ttf') format('truetype'),
+         url('fonts/RiiCookieR.otf') format('opentype');
+    font-display: swap;
+  }
+  html, body { margin:0; padding:0; background:#222; height:100%; overflow:hidden; }
+  .viewport { width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
+  .flyer-wrap {
+    width:100%; height:100%;
+    max-width: calc(100vh * 1.4145);
+    max-height: calc(100vw / 1.4145);
+    aspect-ratio: 1754 / 1240;
+    position:relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    font-family: 'RiiCookieR', sans-serif;
+  }
+  .flyer { position:absolute; inset:0; background: url('images/bg/bg_a4.png') center/cover no-repeat; }
+  .frame-svg, .content-svg { position:absolute; inset:0; width:100%; height:100%; }
+  .content-svg { pointer-events:none; }
+</style>
+</head>
+<body>
+<div class="viewport"><div class="flyer-wrap">
+  <div class="flyer"></div>
+  <svg class="frame-svg" viewBox="0 0 1754 1240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <g stroke="#5C3317" stroke-width="3" fill="none">
+      <rect x="60" y="60" width="707" height="400"/>
+      <rect x="987" y="60" width="707" height="400"/>
+      <rect x="60" y="460" width="707" height="700"/>
+      <rect x="987" y="460" width="707" height="350"/>
+      <rect x="987" y="810" width="707" height="350"/>
+      <rect x="777" y="60" width="200" height="1100"/>
+    </g>
+  </svg>
+  <svg class="content-svg" viewBox="0 0 1754 1240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <filter id="crayon" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="5" result="turb"/>
+        <feDisplacementMap in="SourceGraphic" in2="turb" scale="5" result="disp"/>
+        <feTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="1" seed="3" stitchTiles="stitch" result="grain"/>
+        <feColorMatrix in="grain" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.1 0" result="grainA"/>
+        <feComposite in="grainA" in2="disp" operator="in" result="grainOnText"/>
+        <feMerge><feMergeNode in="disp"/><feMergeNode in="grainOnText"/></feMerge>
+      </filter>
+      <filter id="crayonHalo" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2.5"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="1" seed="4" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+      </filter>
+      <filter id="watercolor" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="1.8" result="blur"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="2" seed="8" result="turb"/>
+        <feDisplacementMap in="blur" in2="turb" scale="5"/>
+      </filter>
+      <radialGradient id="textRed" cx="70%" cy="20%" r="90%">
+        <stop offset="0%" stop-color="#ffd5d5"/>
+        <stop offset="10%" stop-color="#ff5858"/>
+        <stop offset="30%" stop-color="#ff0a0a"/>
+        <stop offset="60%" stop-color="#e60000"/>
+        <stop offset="100%" stop-color="#7a0000"/>
+      </radialGradient>
+      <radialGradient id="heartLight" cx="75%" cy="30%" r="80%">
+        <stop offset="0%" stop-color="#ffb0a0"/>
+        <stop offset="35%" stop-color="#ff6a55"/>
+        <stop offset="70%" stop-color="#e8342a"/>
+        <stop offset="100%" stop-color="#a81d15"/>
+      </radialGradient>
+      <radialGradient id="pinkGrad" cx="50%" cy="45%" r="55%">
+        <stop offset="0%" stop-color="#ff8fa8" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#ff7a94" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#e55a78" stop-opacity="0.7"/>
+      </radialGradient>
+      <filter id="innerStroke" x="-5%" y="-5%" width="110%" height="110%">
+        <feMorphology in="SourceGraphic" operator="erode" radius="1" result="inner"/>
+        <feComposite in="SourceGraphic" in2="inner" operator="out" result="ring"/>
+        <feFlood flood-color="#fff4dc" result="color"/>
+        <feComposite in="color" in2="ring" operator="in" result="coloredRing"/>
+        <feMerge><feMergeNode in="inner"/><feMergeNode in="coloredRing"/></feMerge>
+      </filter>
+      <linearGradient id="markerFade" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0%" stop-color="#FFC380" stop-opacity="0.55"/>
+        <stop offset="75%" stop-color="#FFC380" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#FFC380" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="orangeGloss" cx="70%" cy="20%" r="90%">
+        <stop offset="0%" stop-color="#FFE9C0"/>
+        <stop offset="25%" stop-color="#FFB266"/>
+        <stop offset="60%" stop-color="#FF9040"/>
+        <stop offset="100%" stop-color="#D06618"/>
+      </radialGradient>
+    </defs>
+    <image href="images/products/suika.png" x="284" y="-40" width="600" height="600" preserveAspectRatio="xMidYMid meet"/>
+    <g filter="url(#crayon)">
+      <text x="670" y="130" font-size="68" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 670 130) translate(670 130) scale(0.81 1) translate(-670 -130)">♥</text>
+      <text x="710" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 710 170) translate(710 170) scale(0.81 1) translate(-710 -170)">♥</text>
+    </g>
+    <g>
+      <text x="670" y="130" font-size="68" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1.5" transform="rotate(15 670 130) translate(670 130) scale(0.81 1) translate(-670 -130)">♥</text>
+      <text x="710" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 710 170) translate(710 170) scale(0.81 1) translate(-710 -170)">♥</text>
+    </g>
+    <g font-family="RiiCookieR, sans-serif">
+      <g transform="translate(90 140)">
+        <text x="0" y="0" font-size="88" font-weight="bold" fill="url(#textRed)" filter="url(#crayon)">大人気！</text>
+        <text x="0" y="0" font-size="88" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">大人気！</text>
+      </g>
+      <text x="90" y="209" font-size="57" fill="#5C3317">熊本産</text>
+      <text x="80" y="295" font-size="80" font-weight="bold" fill="#5C3317">スイカ</text>
+      <text x="340" y="295" font-size="53" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">(熊本)</text>
+      <text x="80" y="395" font-size="50" fill="#5C3317">1玉</text>
+      <g>
+        <text x="180" y="410" font-size="100" font-weight="bold" fill="#e8342a" filter="url(#crayon)">2000</text>
+        <text x="180" y="410" font-size="100" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">2000</text>
+      </g>
+      <text x="405" y="395" font-size="50" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">円</text>
+
+      <!-- ===== ブロック② 大特価 いちご ===== -->
+      <image href="images/products/ichigo_red.png" x="1199" y="-55" width="630" height="630" preserveAspectRatio="xMidYMid meet"/>
+      <g filter="url(#crayon)">
+        <text x="1635" y="110" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1635 110) translate(1635 110) scale(0.81 1) translate(-1635 -110)">♥</text>
+        <text x="1600" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1600 170) translate(1600 170) scale(0.81 1) translate(-1600 -170)">♥</text>
+        <text x="1670" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1670 170) translate(1670 170) scale(0.81 1) translate(-1670 -170)">♥</text>
+      </g>
+      <g>
+        <text x="1635" y="110" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1635 110) translate(1635 110) scale(0.81 1) translate(-1635 -110)">♥</text>
+        <text x="1600" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1600 170) translate(1600 170) scale(0.81 1) translate(-1600 -170)">♥</text>
+        <text x="1670" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1670 170) translate(1670 170) scale(0.81 1) translate(-1670 -170)">♥</text>
+      </g>
+      <g transform="translate(1017 140)">
+        <text x="0" y="0" font-size="88" font-weight="bold" fill="url(#textRed)" filter="url(#crayon)" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
+        <text x="0" y="0" font-size="88" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
+      </g>
+      <text x="1007" y="220" font-size="52" fill="#5C3317">いちご品種色々</text>
+      <text x="1007" y="280" font-size="52" fill="#5C3317">早い者勝ち！</text>
+      <text x="1007" y="365" font-size="80" font-weight="bold" fill="#5C3317">いちご</text>
+      <g>
+        <text x="1290" y="380" font-size="100" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">300</text>
+        <text x="1290" y="380" font-size="100" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">300</text>
+      </g>
+      <text x="1490" y="365" font-size="50" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">円</text>
+      <text x="1007" y="430" font-size="40" fill="#5C3317">4パック</text>
+      <text x="1180" y="430" font-size="40" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">1,000</text>
+      <text x="1180" y="430" font-size="40" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">1,000</text>
+      <text x="1280" y="430" font-size="40" fill="#5C3317">円(お得!)</text>
+    </g>
+
+    <!-- ===== ブロック③ 野菜ラインナップ ===== -->
+    <g font-family="RiiCookieR, sans-serif">
+      <image href="images/products/ninjin.png" x="60" y="448" width="81" height="81" transform="rotate(-15 100.5 488.5)"/>
+      <image href="images/products/takenoko.png" x="686" y="448" width="81" height="81" transform="rotate(15 726.5 488.5)"/>
+      <rect x="130" y="496" width="568" height="26" fill="#FFC380" opacity="0.55"/>
+      <text x="414" y="506" text-anchor="middle" font-size="48" font-weight="normal" fill="#5C3317" letter-spacing="5">今週の野菜ラインナップ</text>
+
+      <image href="images/products/ninniku.png" x="43" y="492" width="135" height="135" transform="rotate(5 110.5 559.5)"/>
+      <rect x="160" y="568" width="190" height="26" fill="url(#markerFade)" transform="rotate(-2 255 581)"/>
+      <text x="165" y="578" font-size="42" font-weight="normal" fill="#5C3317">にんにく<tspan font-size="26" font-weight="normal" dx="10">1袋(在庫限り)</tspan></text>
+      <polygon points="535,568 720,568 790,581 720,594 535,594" fill="url(#markerFade)"/>
+      <text x="540" y="578" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="540" y="578" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="680" y="578" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/tamanegi.png" x="43" y="572" width="135" height="135" transform="rotate(-7 110.5 639.5)"/>
+      <rect x="160" y="648" width="150" height="26" fill="url(#markerFade)" transform="rotate(-3 235 661)"/>
+      <text x="165" y="658" font-size="42" font-weight="normal" fill="#5C3317">玉ねぎ<tspan font-size="26" font-weight="normal" dx="10">(ひね) 1袋</tspan></text>
+      <polygon points="535,648 720,648 790,661 720,674 535,674" fill="url(#markerFade)"/>
+      <text x="540" y="658" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="540" y="658" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="680" y="658" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/ninjin.png" x="43" y="652" width="135" height="135" transform="rotate(10 110.5 719.5)"/>
+      <rect x="160" y="728" width="110" height="26" fill="url(#markerFade)"/>
+      <text x="165" y="738" font-size="42" font-weight="normal" fill="#5C3317">人参<tspan font-size="26" font-weight="normal" dx="10">1袋(4本入)</tspan></text>
+      <polygon points="535,728 720,728 790,741 720,754 535,754" fill="url(#markerFade)"/>
+      <text x="540" y="738" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="540" y="738" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="680" y="738" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/piman.png" x="43" y="732" width="135" height="135"/>
+      <polygon points="160,808 330,808 400,821 330,834 160,834" fill="url(#markerFade)"/>
+      <text x="165" y="818" font-size="42" font-weight="normal" fill="#5C3317">ピーマン<tspan font-size="26" font-weight="normal" dx="10">1袋</tspan></text>
+      <polygon points="535,808 720,808 790,821 720,834 535,834" fill="url(#markerFade)"/>
+      <text x="540" y="818" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="540" y="818" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="680" y="818" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/nagaimo.png" x="43" y="812" width="135" height="135" transform="rotate(7 110.5 879.5)"/>
+      <rect x="160" y="888" width="305" height="26" fill="url(#markerFade)" transform="rotate(-5 312.5 901)"/>
+      <text x="165" y="898" font-size="42" font-weight="normal" fill="#5C3317">ながいも<tspan font-size="26" font-weight="normal" dx="10">(八戸) 1袋</tspan></text>
+      <polygon points="535,888 720,888 790,901 720,914 535,914" fill="url(#markerFade)"/>
+      <text x="540" y="898" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">200</text>
+      <text x="540" y="898" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">200</text>
+      <text x="680" y="898" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/satsumaimo.png" x="43" y="892" width="135" height="135" transform="rotate(7 110.5 959.5)"/>
+      <rect x="160" y="968" width="350" height="26" fill="url(#markerFade)" transform="rotate(-3 335 981)"/>
+      <text x="165" y="978" font-size="42" font-weight="normal" fill="#5C3317">さつまいも<tspan font-size="26" font-weight="normal" dx="10">(八戸) 1本</tspan></text>
+      <polygon points="535,968 720,968 790,981 720,994 535,994" fill="url(#markerFade)"/>
+      <text x="540" y="978" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="540" y="978" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="680" y="978" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/satsumaimo.png" x="43" y="972" width="135" height="135" transform="rotate(6 110.5 1039.5)"/>
+      <rect x="160" y="1048" width="325" height="26" fill="url(#markerFade)" transform="rotate(-3 322.5 1061)"/>
+      <text x="165" y="1058" font-size="42" font-weight="normal" fill="#5C3317">シルクスィート<tspan font-size="26" font-weight="normal" dx="10">1箱</tspan></text>
+      <polygon points="535,1048 720,1048 790,1061 720,1074 535,1074" fill="url(#markerFade)"/>
+      <text x="540" y="1058" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">500</text>
+      <text x="540" y="1058" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">500</text>
+      <text x="680" y="1058" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/takenoko.png" x="43" y="1052" width="135" height="135"/>
+      <rect x="160" y="1128" width="265" height="26" fill="url(#markerFade)" transform="rotate(-3 292.5 1141)"/>
+      <text x="165" y="1138" font-size="42" font-weight="normal" fill="#5C3317">筍(タケノコ)<tspan font-size="26" font-weight="normal" dx="10">S〜L</tspan></text>
+      <text x="490" y="1122" font-size="26" fill="#5C3317">各種サイズ早い</text>
+      <text x="490" y="1152" font-size="26" fill="#5C3317">者勝ちでご用意</text>
+      <g filter="url(#crayon)">
+        <text x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
+      </g>
+      <g>
+        <text x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
+      </g>
+    </g>
+
+    <!-- ===== セクター⑧ 中央帯 上部イラスト [FIX] pos=(799,39) size=156x156 rotate=5@(877,117) ===== -->
+    <image id="s8-top-img" href="images/products/kyabetsu.png" x="799" y="39" width="156" height="156" transform="rotate(5 877 117)"/>
+
+    <!-- ===== ブロック④ おススメ果物&amp;トマト ===== -->
+    <g font-family="RiiCookieR, sans-serif">
+      <image href="images/products/tomato.png" x="987" y="478" width="81" height="81" transform="rotate(-15 1027.5 518.5)"/>
+      <g filter="url(#crayon)">
+        <text x="1653" y="530" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1653 530) translate(1653 530) scale(0.81 1) translate(-1653 -530)">♥</text>
+      </g>
+      <g>
+        <text x="1653" y="530" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1653 530) translate(1653 530) scale(0.81 1) translate(-1653 -530)">♥</text>
+      </g>
+      <rect x="1083" y="526" width="515" height="26" fill="#FFC380" opacity="0.55"/>
+      <text x="1340.5" y="536" text-anchor="middle" font-size="50" font-weight="normal" fill="#5C3317" letter-spacing="5">おススメ果物&amp;トマト</text>
+
+      <image href="images/products/melon.png" x="970" y="522" width="135" height="135" transform="rotate(5 1037.5 589.5)"/>
+      <rect x="1087" y="598" width="150" height="26" fill="url(#markerFade)"/>
+      <text x="1092" y="608" font-size="42" font-weight="normal" fill="#5C3317">メロン<tspan font-size="26" font-weight="normal" dx="10">1玉</tspan></text>
+      <polygon points="1462,598 1647,598 1694,611 1647,624 1462,624" fill="url(#markerFade)"/>
+      <text x="1467" y="608" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">300</text>
+      <text x="1467" y="608" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">300</text>
+      <text x="1607" y="608" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/tomato.png" x="970" y="602" width="135" height="135" transform="rotate(-7 1037.5 669.5)"/>
+      <rect x="1087" y="678" width="240" height="26" fill="url(#markerFade)"/>
+      <text x="1092" y="688" font-size="42" font-weight="normal" fill="#5C3317">中玉トマト<tspan font-size="26" font-weight="normal" dx="7">(ﾐﾃﾞｨ)</tspan><tspan font-size="26" font-weight="normal" dx="3">1ﾊﾟｯｸ</tspan></text>
+      <polygon points="1462,678 1647,678 1694,691 1647,704 1462,704" fill="url(#markerFade)"/>
+      <text x="1467" y="688" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">200</text>
+      <text x="1467" y="688" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">200</text>
+      <text x="1607" y="688" font-size="42" fill="#5C3317">円</text>
+
+      <text x="1092" y="768" font-size="42" font-weight="normal" fill="#5C3317" textLength="515" lengthAdjust="spacing">・・・・・・・</text>
+
+      <!-- ===== セクター⑤ 柑橘いろいろ ===== -->
+      <image href="images/products/kiyomi_orange.png" x="987" y="818" width="81" height="81" transform="rotate(-15 1027.5 858.5)"/>
+      <g filter="url(#crayon)">
+        <text x="1653" y="870" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1653 870) translate(1653 870) scale(0.81 1) translate(-1653 -870)">♥</text>
+      </g>
+      <g>
+        <text x="1653" y="870" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1653 870) translate(1653 870) scale(0.81 1) translate(-1653 -870)">♥</text>
+      </g>
+      <rect x="1083" y="866" width="515" height="26" fill="#FFC380" opacity="0.55"/>
+      <text x="1340.5" y="876" text-anchor="middle" font-size="50" font-weight="normal" fill="#5C3317" letter-spacing="5">柑橘いろいろ</text>
+
+      <image href="images/products/amanatsu.png" x="970" y="862" width="135" height="135" transform="rotate(5 1037.5 929.5)"/>
+      <rect x="1087" y="938" width="140" height="26" fill="url(#markerFade)"/>
+      <text x="1092" y="948" font-size="42" font-weight="normal" fill="#5C3317">甘夏<tspan font-size="26" font-weight="normal" dx="10">3個</tspan></text>
+      <polygon points="1462,938 1647,938 1694,951 1647,964 1462,964" fill="url(#markerFade)"/>
+      <text x="1467" y="948" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">200</text>
+      <text x="1467" y="948" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">200</text>
+      <text x="1607" y="948" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/kiyomi_orange.png" x="970" y="942" width="135" height="135" transform="rotate(-7 1037.5 1009.5)"/>
+      <rect x="1087" y="1018" width="240" height="26" fill="url(#markerFade)"/>
+      <text x="1092" y="1028" font-size="42" font-weight="normal" fill="#5C3317">清見オレンジ<tspan font-size="26" font-weight="normal" dx="10">1個</tspan></text>
+      <polygon points="1462,1018 1647,1018 1694,1031 1647,1044 1462,1044" fill="url(#markerFade)"/>
+      <text x="1467" y="1028" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="1467" y="1028" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="1607" y="1028" font-size="42" fill="#5C3317">円</text>
+
+      <image href="images/products/hassaku.png" x="970" y="1022" width="135" height="135" transform="rotate(5 1037.5 1089.5)"/>
+      <rect x="1087" y="1098" width="280" height="26" fill="url(#markerFade)"/>
+      <text x="1092" y="1108" font-size="42" font-weight="normal" fill="#5C3317">八朔<tspan font-size="26" font-weight="normal" dx="7">(はっさく)</tspan><tspan font-size="26" font-weight="normal" dx="3">1個</tspan></text>
+      <polygon points="1462,1098 1647,1098 1694,1111 1647,1124 1462,1124" fill="url(#markerFade)"/>
+      <text x="1467" y="1108" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+      <text x="1467" y="1108" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+      <text x="1607" y="1108" font-size="42" fill="#5C3317">円</text>
+
+      <!-- ============================================================ -->
+      <!-- セクター⑧ 中央帯 [FIX] 縦書き大見出し「今週の直売メニュー」 -->
+      <!--   枠: x=777 y=60 w=200 h=1100                                -->
+      <!--   文字: font-size=90 font-family=RiiCookieR text-anchor=middle -->
+      <!--   中心X: 877 / 9文字 y=252,352,452,552,652,752,852,952        -->
+      <!--   長音"ー": rect x=872 y=980 w=10 h=60 rx=3                   -->
+      <!--   今/週/の/メ/ニ/ュ/ー: fill=url(#orangeGloss) stroke=#5C3317 w=2 -->
+      <!--   直/売: fill=url(#textRed) filter=#crayon stroke=#3d1a10 w=1 -->
+      <!-- ============================================================ -->
+      <!-- ===== セクター⑧ 中央帯 9文字「今週の直売メニュー」 ===== -->
+      <text x="877" y="252" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+      <text x="877" y="252" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+      <text x="877" y="352" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+      <text x="877" y="352" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+      <text x="877" y="452" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+      <text x="877" y="452" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+      <text x="877" y="552" font-size="90" font-weight="normal" fill="url(#textRed)" filter="url(#crayon)" font-family="RiiCookieR, sans-serif" text-anchor="middle">直</text>
+      <text x="877" y="552" font-size="90" font-weight="normal" fill="none" stroke="#3d1a10" stroke-width="1" font-family="RiiCookieR, sans-serif" text-anchor="middle">直</text>
+      <text x="877" y="652" font-size="90" font-weight="normal" fill="url(#textRed)" filter="url(#crayon)" font-family="RiiCookieR, sans-serif" text-anchor="middle">売</text>
+      <text x="877" y="652" font-size="90" font-weight="normal" fill="none" stroke="#3d1a10" stroke-width="1" font-family="RiiCookieR, sans-serif" text-anchor="middle">売</text>
+      <text x="877" y="752" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+      <text x="877" y="752" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+      <text x="877" y="852" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+      <text x="877" y="852" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+      <text x="877" y="952" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+      <text x="877" y="952" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+      <rect x="872" y="980" width="10" height="60" fill="url(#orangeGloss)" rx="3" ry="3"/>
+      <rect x="872" y="980" width="10" height="60" fill="none" stroke="#5C3317" stroke-width="2" rx="3" ry="3"/>
+    </g>
+
+    <!-- ===== セクター⑧ 中央帯 下部イラスト [FIX] pos=(799,1037) size=156x156 rotate=-20@(877,1115) ===== -->
+    <image id="s8-bottom-img" href="images/products/maitake.png" x="799" y="1037" width="156" height="156" transform="rotate(-20 877 1115)"/>
+
+    <!-- ===== フッター 注意書き (ブロック③ 枠外) ===== -->
+    <g font-family="RiiCookieR, sans-serif">
+      <text x="80" y="1190" font-size="22" fill="#5C3317">・いちごは1家族様につき、最大5ケースまで。</text>
+      <text x="80" y="1222" font-size="22" fill="#5C3317">・業者様と思われる方による大量購入は、禁止とさせていただきます。</text>
+      <text x="1340.5" y="1190" text-anchor="middle" font-size="30.8" fill="#5C3317">ここに掲載していない商品も多数用意してます！</text>
+    </g>
+  </svg>
+</div></div>
+</body>
+</html>
