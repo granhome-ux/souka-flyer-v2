@@ -1,0 +1,197 @@
+{
+  "version": "1.0",
+  "categories": {
+    "fruits": {
+      "label": "果物",
+      "subcategories": {
+        "citrus": {
+          "label": "柑橘類",
+          "items": [
+            {"file": "mikan.png", "label": "みかん"},
+            {"file": "ponkan.png", "label": "ぽんかん"},
+            {"file": "yuzu.png", "label": "ゆず"},
+            {"file": "iyokan.png", "label": "いよかん"},
+            {"file": "dekopon.png", "label": "デコポン"},
+            {"file": "kiyomi_orange.png", "label": "清見オレンジ"},
+            {"file": "hassaku.png", "label": "八朔"},
+            {"file": "amanatsu.png", "label": "甘夏"},
+            {"file": "lemon.png", "label": "レモン"},
+            {"file": "lime.png", "label": "ライム"},
+            {"file": "sudachi.png", "label": "すだち"},
+            {"file": "kabosu.png", "label": "かぼす"},
+            {"file": "kinkan.png", "label": "きんかん"},
+            {"file": "banpeiyu.png", "label": "晩白柚"},
+            {"file": "buntan.png", "label": "文旦"},
+            {"file": "grapefruit.png", "label": "グレープフルーツ"}
+          ]
+        },
+        "berries": {
+          "label": "ベリー類",
+          "items": [
+            {"file": "ichigo_red.png", "label": "いちご(赤)"},
+            {"file": "ichigo_white.png", "label": "いちご(白)"},
+            {"file": "blueberry.png", "label": "ブルーベリー"},
+            {"file": "raspberry.png", "label": "ラズベリー"}
+          ]
+        },
+        "tropical": {
+          "label": "南国・熱帯",
+          "items": [
+            {"file": "mango.png", "label": "マンゴー"},
+            {"file": "passion_fruit.png", "label": "パッションフルーツ"},
+            {"file": "dragon_fruit.png", "label": "ドラゴンフルーツ"},
+            {"file": "lychee.png", "label": "ライチ"},
+            {"file": "papaya.png", "label": "パパイヤ"},
+            {"file": "guava.png", "label": "グアバ"},
+            {"file": "star_fruit.png", "label": "スターフルーツ"},
+            {"file": "pomegranate.png", "label": "ザクロ"},
+            {"file": "pineapple.png", "label": "パイナップル"},
+            {"file": "avocado.png", "label": "アボカド"}
+          ]
+        },
+        "grapes": {
+          "label": "ぶどう類",
+          "items": [
+            {"file": "kyoho.png", "label": "巨峰"},
+            {"file": "muscat.png", "label": "マスカット"},
+            {"file": "delaware.png", "label": "デラウェア"}
+          ]
+        },
+        "pome": {
+          "label": "梨・りんご類",
+          "items": [
+            {"file": "nashi.png", "label": "梨"},
+            {"file": "ringo.png", "label": "りんご"},
+            {"file": "pear_western.png", "label": "西洋梨"}
+          ]
+        },
+        "stone": {
+          "label": "核果類",
+          "items": [
+            {"file": "momo.png", "label": "桃"},
+            {"file": "plum.png", "label": "プラム"},
+            {"file": "prune.png", "label": "プルーン"},
+            {"file": "anzu.png", "label": "アンズ"},
+            {"file": "nectarine.png", "label": "ネクタリン"},
+            {"file": "cherry.png", "label": "さくらんぼ"},
+            {"file": "ao_ume.png", "label": "青梅"}
+          ]
+        },
+        "fruits_other": {
+          "label": "その他果物",
+          "items": [
+            {"file": "suika.png", "label": "スイカ"},
+            {"file": "kodama_suika.png", "label": "子玉スイカ"},
+            {"file": "melon.png", "label": "メロン"},
+            {"file": "kaki.png", "label": "柿"},
+            {"file": "ichijiku.png", "label": "イチジク"},
+            {"file": "chestnut.png", "label": "栗"},
+            {"file": "banana.png", "label": "バナナ"},
+            {"file": "kiwi.png", "label": "キウイ"}
+          ]
+        }
+      }
+    },
+    "vegetables": {
+      "label": "野菜",
+      "subcategories": {
+        "leafy": {
+          "label": "葉物",
+          "items": [
+            {"file": "hakusai.png", "label": "白菜"},
+            {"file": "kyabetsu.png", "label": "キャベツ"},
+            {"file": "horenso.png", "label": "ほうれん草"},
+            {"file": "komatsuna.png", "label": "小松菜"},
+            {"file": "shungiku.png", "label": "春菊"},
+            {"file": "sunny_lettuce.png", "label": "サニーレタス"},
+            {"file": "ooba.png", "label": "大葉"},
+            {"file": "nira.png", "label": "ニラ"},
+            {"file": "moroheiya.png", "label": "モロヘイヤ"}
+          ]
+        },
+        "root": {
+          "label": "根菜",
+          "items": [
+            {"file": "daikon.png", "label": "大根"},
+            {"file": "kabu.png", "label": "蕪"},
+            {"file": "ninjin.png", "label": "人参"},
+            {"file": "gobo.png", "label": "ごぼう"},
+            {"file": "jagaimo.png", "label": "じゃがいも"},
+            {"file": "satsumaimo.png", "label": "さつまいも"},
+            {"file": "satoimo.png", "label": "里芋"},
+            {"file": "yacon.png", "label": "ヤーコン"},
+            {"file": "nagaimo.png", "label": "ながいも"},
+            {"file": "renkon.png", "label": "蓮根"},
+            {"file": "tamanegi.png", "label": "玉ねぎ"},
+            {"file": "ninniku.png", "label": "にんにく"},
+            {"file": "shoga.png", "label": "生姜"},
+            {"file": "naga_negi.png", "label": "長ネギ"},
+            {"file": "takenoko.png", "label": "たけのこ"}
+          ]
+        },
+        "fruit_veg": {
+          "label": "実野菜",
+          "items": [
+            {"file": "tomato.png", "label": "トマト"},
+            {"file": "tomato_mini.png", "label": "ミニトマト"},
+            {"file": "nasu.png", "label": "なす"},
+            {"file": "kyuri.png", "label": "きゅうり"},
+            {"file": "piman.png", "label": "ピーマン"},
+            {"file": "paprika.png", "label": "パプリカ"},
+            {"file": "shishito.png", "label": "ししとう"},
+            {"file": "zucchini.png", "label": "ズッキーニ"},
+            {"file": "okra.png", "label": "オクラ"},
+            {"file": "kabocha.png", "label": "かぼちゃ"},
+            {"file": "corn.png", "label": "とうもろこし"},
+            {"file": "edamame.png", "label": "枝豆"},
+            {"file": "sora_mame.png", "label": "そら豆"},
+            {"file": "snap_endo.png", "label": "スナップえんどう"}
+          ]
+        },
+        "floral": {
+          "label": "花野菜",
+          "items": [
+            {"file": "broccoli.png", "label": "ブロッコリー"},
+            {"file": "cauliflower.png", "label": "カリフラワー"},
+            {"file": "mekyabetsu.png", "label": "芽キャベツ"}
+          ]
+        },
+        "aromatic": {
+          "label": "香味",
+          "items": [
+            {"file": "myoga.png", "label": "みょうが"},
+            {"file": "celery.png", "label": "セロリ"},
+            {"file": "asparagus.png", "label": "アスパラガス"},
+            {"file": "asparagus_white.png", "label": "白アスパラガス"}
+          ]
+        }
+      }
+    },
+    "mushrooms": {
+      "label": "キノコ",
+      "subcategories": {
+        "mushrooms_all": {
+          "label": "きのこ",
+          "items": [
+            {"file": "shiitake.png", "label": "しいたけ"},
+            {"file": "maitake.png", "label": "まいたけ"},
+            {"file": "enoki.png", "label": "えのき"},
+            {"file": "eringi.png", "label": "エリンギ"},
+            {"file": "bunashimeji.png", "label": "ぶなしめじ"}
+          ]
+        }
+      }
+    },
+    "others": {
+      "label": "その他",
+      "subcategories": {
+        "brand": {
+          "label": "ブランド",
+          "items": [
+            {"file": "mango_taiyo_no_tamago.png", "label": "太陽のタマゴマンゴー"}
+          ]
+        }
+      }
+    }
+  }
+}
