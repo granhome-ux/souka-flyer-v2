@@ -46,6 +46,16 @@
   .sec-edit hr{border:none;border-top:1px dashed #c4a26580;margin:16px 0 8px}
   .sec-edit .sub-input{display:none}
   .sec-edit .sub-input.show{display:block}
+  .sec-edit .sub-fieldset{border:1px solid #d8c8a8;border-radius:8px;padding:10px 12px 12px;margin-top:12px;background:#faf8f4;box-shadow:none}
+  .sec-edit .sub-fieldset legend{font-size:12px;font-weight:700;color:#8b6914;padding:1px 8px;background:#fff;border:1px solid #d8c8a8;border-radius:4px}
+  .sec-edit .s3-row-editor{border:1px solid #ccc;border-radius:6px;padding:8px 10px;margin-top:8px;background:#fff}
+  .sec-edit .s3-row-editor.is-empty{background:#f0f0f0;opacity:0.55}
+  .sec-edit .s3-row-editor legend{font-size:11px;font-weight:900;color:#5a3e1b;padding:1px 6px;background:#f0e6d0;border:1px solid #c4a265;border-radius:3px}
+  .sec-edit .s3-row-editor .preview-thumb{width:48px;height:48px;display:inline-block;margin-left:8px;vertical-align:middle}
+  .sec-edit .s3-row-editor .mode-radios{display:flex;gap:12px;margin-top:6px}
+  .sec-edit .s3-row-editor .mode-radios label{display:inline-flex;align-items:center;gap:4px;margin:0;font-size:12px}
+  .sec-edit .s3-row-editor .mode-block{display:none;margin-top:6px}
+  .sec-edit .s3-row-editor .mode-block.show{display:block}
   /* ===== チラシプレビュー（確認タブ） ===== */
   .preview-area{padding:12px;background:#333;min-height:calc(100vh - 110px)}
   .preview-area .hint{font-size:11px;color:#ccc;text-align:center;margin-bottom:8px}
@@ -149,6 +159,143 @@
       </div>
       <img id="s1-f-img-preview" class="preview-thumb" alt="画像プレビュー">
     </fieldset>
+
+    <fieldset>
+      <legend>セクター② 右上・大特価</legend>
+
+      <label>T1 大見出し（6字まで）
+        <input type="text" id="s2-f-headline" maxlength="6" placeholder="大特価！">
+      </label>
+
+      <div class="row">
+        <label style="flex:1">T2-1 サブコピー1行目（10字）
+          <input type="text" id="s2-f-sub1" maxlength="10" placeholder="いちご品種色々">
+        </label>
+        <label style="flex:1">T2-2 サブコピー2行目（10字）
+          <input type="text" id="s2-f-sub2" maxlength="10" placeholder="早い者勝ち！">
+        </label>
+      </div>
+
+      <label>T3A 商品名（7字まで）
+        <input type="text" id="s2-f-name" maxlength="7" placeholder="いちご">
+      </label>
+
+      <fieldset class="sub-fieldset">
+        <legend>メイン価格</legend>
+        <div class="row">
+          <label style="flex:1">T4a 個数（3桁）
+            <input type="number" id="s2-f-qtynum" min="0" max="999" placeholder="1">
+          </label>
+          <label style="flex:1">T4b 個数単位
+            <select id="s2-f-qtyunit">
+              <option value="玉">玉</option>
+              <option value="個">個</option>
+              <option value="袋">袋</option>
+              <option value="本">本</option>
+              <option value="パック">パック</option>
+              <option value="箱">箱</option>
+              <option value="房">房</option>
+              <option value="束">束</option>
+              <option value="">なし</option>
+              <option value="__custom__">自由入力…</option>
+            </select>
+          </label>
+        </div>
+        <label class="sub-input" id="s2-f-qtyunit-custom-wrap">（自由入力）
+          <input type="text" id="s2-f-qtyunit-custom" placeholder="単位を入力">
+        </label>
+
+        <div class="row">
+          <label style="flex:1">T4c 値段（6桁）
+            <input type="number" id="s2-f-pricenum" min="0" max="999999" placeholder="300">
+          </label>
+          <label style="flex:1">T4d 通貨単位
+            <select id="s2-f-currency">
+              <option value="円">円</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="">なし</option>
+              <option value="__custom__">自由入力…</option>
+            </select>
+          </label>
+        </div>
+        <label class="sub-input" id="s2-f-currency-custom-wrap">（自由入力）
+          <input type="text" id="s2-f-currency-custom" placeholder="通貨単位を入力">
+        </label>
+      </fieldset>
+
+      <fieldset class="sub-fieldset">
+        <legend>サブ価格（なし可）</legend>
+        <div class="row">
+          <label style="flex:1">T5a 個数（空欄=非表示）
+            <input type="number" id="s2-f-subqtynum" min="0" max="999" placeholder="4">
+          </label>
+          <label style="flex:1">T5b 個数単位
+            <select id="s2-f-subqtyunit">
+              <option value="玉">玉</option>
+              <option value="個">個</option>
+              <option value="袋">袋</option>
+              <option value="本">本</option>
+              <option value="パック">パック</option>
+              <option value="箱">箱</option>
+              <option value="房">房</option>
+              <option value="束">束</option>
+              <option value="">なし</option>
+              <option value="__custom__">自由入力…</option>
+            </select>
+          </label>
+        </div>
+        <label class="sub-input" id="s2-f-subqtyunit-custom-wrap">（自由入力）
+          <input type="text" id="s2-f-subqtyunit-custom" placeholder="単位を入力">
+        </label>
+
+        <div class="row">
+          <label style="flex:1">T5c 値段（カンマ表示、空欄=非表示）
+            <input type="number" id="s2-f-subpricenum" min="0" max="999999" placeholder="1000">
+          </label>
+          <label style="flex:1">T5d 通貨単位
+            <select id="s2-f-subcurrency">
+              <option value="円">円</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="">なし</option>
+              <option value="__custom__">自由入力…</option>
+            </select>
+          </label>
+        </div>
+        <label class="sub-input" id="s2-f-subcurrency-custom-wrap">（自由入力）
+          <input type="text" id="s2-f-subcurrency-custom" placeholder="通貨単位を入力">
+        </label>
+
+        <label>T5e サブコメント（7字、括弧自動付与）
+          <input type="text" id="s2-f-subcomment" maxlength="7" placeholder="お得!">
+        </label>
+      </fieldset>
+
+      <hr>
+      <label>I1 メイン画像</label>
+      <div class="row">
+        <select id="s2-f-img-cat" style="flex:1"></select>
+        <select id="s2-f-img-sub" style="flex:1"></select>
+        <select id="s2-f-img-item" style="flex:2"></select>
+      </div>
+      <img id="s2-f-img-preview" class="preview-thumb" alt="画像プレビュー">
+    </fieldset>
+
+    <fieldset>
+      <legend>セクター③ 左下・野菜ラインナップ</legend>
+      <label>T0 見出し（11字）
+        <input type="text" id="s3-f-headline" maxlength="11" placeholder="今週の野菜ラインナップ">
+      </label>
+      <div id="s3-f-rows-container"></div>
+      <hr>
+      <label>F1 注意1行目（35字）
+        <input type="text" id="s3-f-footer1" maxlength="35" placeholder="・いちごは1家族様につき、最大5ケースまで。">
+      </label>
+      <label>F2 注意2行目（35字）
+        <input type="text" id="s3-f-footer2" maxlength="35" placeholder="・業者様と思われる方による大量購入は、禁止とさせていただきます。">
+      </label>
+    </fieldset>
   </div>
 </div>
 
@@ -250,7 +397,7 @@
           <text id="s1-currency" x="405" y="395" font-size="50" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">円</text>
 
           <!-- ===== ブロック② 大特価 いちご ===== -->
-          <image href="images/products/ichigo_red.png" x="1199" y="-55" width="630" height="630" preserveAspectRatio="xMidYMid meet"/>
+          <image id="s2-main-image" href="images/products/ichigo_red.png" x="1199" y="-55" width="630" height="630" preserveAspectRatio="xMidYMid meet"/>
           <g filter="url(#crayon)">
             <text x="1635" y="110" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1635 110) translate(1635 110) scale(0.81 1) translate(-1635 -110)">♥</text>
             <text x="1600" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 1600 170) translate(1600 170) scale(0.81 1) translate(-1600 -170)">♥</text>
@@ -262,96 +409,134 @@
             <text x="1670" y="170" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 1670 170) translate(1670 170) scale(0.81 1) translate(-1670 -170)">♥</text>
           </g>
           <g transform="translate(1017 140)">
-            <text x="0" y="0" font-size="88" font-weight="bold" fill="url(#textRed)" filter="url(#crayon)" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
-            <text x="0" y="0" font-size="88" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
+            <text id="s2-headline-fill" x="0" y="0" font-size="88" font-weight="bold" fill="url(#textRed)" filter="url(#crayon)" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
+            <text id="s2-headline-stroke" x="0" y="0" font-size="88" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1" rotate="0 0 0 8" letter-spacing="5">大特価！</text>
           </g>
-          <text x="1007" y="220" font-size="52" fill="#5C3317">いちご品種色々</text>
-          <text x="1007" y="280" font-size="52" fill="#5C3317">早い者勝ち！</text>
-          <text x="1007" y="365" font-size="80" font-weight="bold" fill="#5C3317">いちご</text>
+          <text id="s2-sub1" x="1007" y="220" font-size="52" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">いちご品種色々</text>
+          <text id="s2-sub2" x="1007" y="280" font-size="52" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">早い者勝ち！</text>
+          <text id="s2-name" x="1007" y="365" font-size="80" font-weight="bold" fill="#5C3317" stroke="#fff4dc" stroke-width="10" paint-order="stroke">いちご</text>
           <g>
-            <text x="1290" y="380" font-size="100" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">300</text>
-            <text x="1290" y="380" font-size="100" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">300</text>
+            <text id="s2-price-fill" x="1290" y="380" font-size="100" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">300</text>
+            <text id="s2-price-stroke" x="1290" y="380" font-size="100" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">300</text>
           </g>
-          <text x="1490" y="365" font-size="50" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">円</text>
-          <text x="1007" y="430" font-size="40" fill="#5C3317">4パック</text>
-          <text x="1180" y="430" font-size="40" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">1,000</text>
-          <text x="1180" y="430" font-size="40" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">1,000</text>
-          <text x="1280" y="430" font-size="40" fill="#5C3317">円(お得!)</text>
+          <text id="s2-currency" x="1490" y="365" font-size="50" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">円</text>
+          <text id="s2-subqty" x="1007" y="430" font-size="40" fill="#5C3317">4パック</text>
+          <text id="s2-subprice-fill" x="1180" y="430" font-size="40" font-weight="bold" fill="#e8342a" stroke="#fff4dc" stroke-width="8" paint-order="stroke" filter="url(#crayon)">1,000</text>
+          <text id="s2-subprice-stroke" x="1180" y="430" font-size="40" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">1,000</text>
+          <text id="s2-subcurrency" x="1280" y="430" font-size="40" fill="#5C3317">円</text>
+          <text id="s2-subcomment" x="1320" y="430" font-size="40" fill="#5C3317" stroke="#fff4dc" stroke-width="8" paint-order="stroke">(お得!)</text>
         </g>
 
         <!-- ===== ブロック③ 野菜ラインナップ ===== -->
         <g font-family="RiiCookieR, sans-serif">
-          <image href="images/products/ninjin.png" x="60" y="448" width="81" height="81" transform="rotate(-15 100.5 488.5)"/>
-          <image href="images/products/takenoko.png" x="686" y="448" width="81" height="81" transform="rotate(15 726.5 488.5)"/>
+          <image id="s3-decor-left" href="images/products/ninjin.png" x="60" y="448" width="81" height="81" transform="rotate(-15 100.5 488.5)"/>
+          <image id="s3-decor-right" href="images/products/takenoko.png" x="686" y="448" width="81" height="81" transform="rotate(15 726.5 488.5)"/>
           <rect x="130" y="496" width="568" height="26" fill="#FFC380" opacity="0.55"/>
-          <text x="414" y="506" text-anchor="middle" font-size="48" font-weight="normal" fill="#5C3317" letter-spacing="5">今週の野菜ラインナップ</text>
+          <text id="s3-headline" x="414" y="506" text-anchor="middle" font-size="48" font-weight="normal" fill="#5C3317" letter-spacing="5">今週の野菜ラインナップ</text>
 
-          <image href="images/products/ninniku.png" x="43" y="492" width="135" height="135" transform="rotate(5 110.5 559.5)"/>
-          <rect x="160" y="568" width="190" height="26" fill="url(#markerFade)" transform="rotate(-2 255 581)"/>
-          <text x="165" y="578" font-size="42" font-weight="normal" fill="#5C3317">にんにく<tspan font-size="26" font-weight="normal" dx="10">1袋(在庫限り)</tspan></text>
-          <polygon points="535,568 720,568 790,581 720,594 535,594" fill="url(#markerFade)"/>
-          <text x="540" y="578" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
-          <text x="540" y="578" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
-          <text x="680" y="578" font-size="42" fill="#5C3317">円</text>
+          <!-- 行1 -->
+          <image id="s3-row1-image" href="images/products/ninniku.png" x="43" y="492" width="135" height="135" transform="rotate(5 110.5 559.5)"/>
+          <rect id="s3-row1-name-marker" x="160" y="568" width="190" height="26" fill="url(#markerFade)" transform="rotate(-2 255 581)"/>
+          <text id="s3-row1-name" x="165" y="578" font-size="42" font-weight="normal" fill="#5C3317">にんにく<tspan id="s3-row1-unit" font-size="26" font-weight="normal" dx="10">1袋(在庫限り)</tspan></text>
+          <polygon id="s3-row1-price-marker" points="535,568 720,568 790,581 720,594 535,594" fill="url(#markerFade)"/>
+          <text id="s3-row1-price-fill" x="540" y="578" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+          <text id="s3-row1-price-stroke" x="540" y="578" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+          <text id="s3-row1-currency" x="680" y="578" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row1-text1" x="490" y="562" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row1-text2" x="490" y="592" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/tamanegi.png" x="43" y="572" width="135" height="135" transform="rotate(-7 110.5 639.5)"/>
-          <rect x="160" y="648" width="150" height="26" fill="url(#markerFade)" transform="rotate(-3 235 661)"/>
-          <text x="165" y="658" font-size="42" font-weight="normal" fill="#5C3317">玉ねぎ<tspan font-size="26" font-weight="normal" dx="10">(ひね) 1袋</tspan></text>
-          <polygon points="535,648 720,648 790,661 720,674 535,674" fill="url(#markerFade)"/>
-          <text x="540" y="658" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
-          <text x="540" y="658" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
-          <text x="680" y="658" font-size="42" fill="#5C3317">円</text>
+          <!-- 行2 -->
+          <image id="s3-row2-image" href="images/products/tamanegi.png" x="43" y="572" width="135" height="135" transform="rotate(-7 110.5 639.5)"/>
+          <rect id="s3-row2-name-marker" x="160" y="648" width="150" height="26" fill="url(#markerFade)" transform="rotate(-3 235 661)"/>
+          <text id="s3-row2-name" x="165" y="658" font-size="42" font-weight="normal" fill="#5C3317">玉ねぎ<tspan id="s3-row2-unit" font-size="26" font-weight="normal" dx="10">(ひね) 1袋</tspan></text>
+          <polygon id="s3-row2-price-marker" points="535,648 720,648 790,661 720,674 535,674" fill="url(#markerFade)"/>
+          <text id="s3-row2-price-fill" x="540" y="658" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+          <text id="s3-row2-price-stroke" x="540" y="658" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+          <text id="s3-row2-currency" x="680" y="658" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row2-text1" x="490" y="642" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row2-text2" x="490" y="672" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/ninjin.png" x="43" y="652" width="135" height="135" transform="rotate(10 110.5 719.5)"/>
-          <rect x="160" y="728" width="110" height="26" fill="url(#markerFade)"/>
-          <text x="165" y="738" font-size="42" font-weight="normal" fill="#5C3317">人参<tspan font-size="26" font-weight="normal" dx="10">1袋(4本入)</tspan></text>
-          <polygon points="535,728 720,728 790,741 720,754 535,754" fill="url(#markerFade)"/>
-          <text x="540" y="738" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
-          <text x="540" y="738" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
-          <text x="680" y="738" font-size="42" fill="#5C3317">円</text>
+          <!-- 行3 -->
+          <image id="s3-row3-image" href="images/products/ninjin.png" x="43" y="652" width="135" height="135" transform="rotate(10 110.5 719.5)"/>
+          <rect id="s3-row3-name-marker" x="160" y="728" width="110" height="26" fill="url(#markerFade)"/>
+          <text id="s3-row3-name" x="165" y="738" font-size="42" font-weight="normal" fill="#5C3317">人参<tspan id="s3-row3-unit" font-size="26" font-weight="normal" dx="10">1袋(4本入)</tspan></text>
+          <polygon id="s3-row3-price-marker" points="535,728 720,728 790,741 720,754 535,754" fill="url(#markerFade)"/>
+          <text id="s3-row3-price-fill" x="540" y="738" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+          <text id="s3-row3-price-stroke" x="540" y="738" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+          <text id="s3-row3-currency" x="680" y="738" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row3-text1" x="490" y="722" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row3-text2" x="490" y="752" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/piman.png" x="43" y="732" width="135" height="135"/>
-          <polygon points="160,808 330,808 400,821 330,834 160,834" fill="url(#markerFade)"/>
-          <text x="165" y="818" font-size="42" font-weight="normal" fill="#5C3317">ピーマン<tspan font-size="26" font-weight="normal" dx="10">1袋</tspan></text>
-          <polygon points="535,808 720,808 790,821 720,834 535,834" fill="url(#markerFade)"/>
-          <text x="540" y="818" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
-          <text x="540" y="818" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
-          <text x="680" y="818" font-size="42" fill="#5C3317">円</text>
+          <!-- 行4 -->
+          <image id="s3-row4-image" href="images/products/piman.png" x="43" y="732" width="135" height="135"/>
+          <polygon id="s3-row4-name-marker" points="160,808 330,808 400,821 330,834 160,834" fill="url(#markerFade)"/>
+          <text id="s3-row4-name" x="165" y="818" font-size="42" font-weight="normal" fill="#5C3317">ピーマン<tspan id="s3-row4-unit" font-size="26" font-weight="normal" dx="10">1袋</tspan></text>
+          <polygon id="s3-row4-price-marker" points="535,808 720,808 790,821 720,834 535,834" fill="url(#markerFade)"/>
+          <text id="s3-row4-price-fill" x="540" y="818" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+          <text id="s3-row4-price-stroke" x="540" y="818" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+          <text id="s3-row4-currency" x="680" y="818" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row4-text1" x="490" y="802" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row4-text2" x="490" y="832" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/nagaimo.png" x="43" y="812" width="135" height="135" transform="rotate(7 110.5 879.5)"/>
-          <rect x="160" y="888" width="305" height="26" fill="url(#markerFade)" transform="rotate(-5 312.5 901)"/>
-          <text x="165" y="898" font-size="42" font-weight="normal" fill="#5C3317">ながいも<tspan font-size="26" font-weight="normal" dx="10">(八戸) 1袋</tspan></text>
-          <polygon points="535,888 720,888 790,901 720,914 535,914" fill="url(#markerFade)"/>
-          <text x="540" y="898" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">200</text>
-          <text x="540" y="898" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">200</text>
-          <text x="680" y="898" font-size="42" fill="#5C3317">円</text>
+          <!-- 行5 -->
+          <image id="s3-row5-image" href="images/products/nagaimo.png" x="43" y="812" width="135" height="135" transform="rotate(7 110.5 879.5)"/>
+          <rect id="s3-row5-name-marker" x="160" y="888" width="305" height="26" fill="url(#markerFade)" transform="rotate(-5 312.5 901)"/>
+          <text id="s3-row5-name" x="165" y="898" font-size="42" font-weight="normal" fill="#5C3317">ながいも<tspan id="s3-row5-unit" font-size="26" font-weight="normal" dx="10">(八戸) 1袋</tspan></text>
+          <polygon id="s3-row5-price-marker" points="535,888 720,888 790,901 720,914 535,914" fill="url(#markerFade)"/>
+          <text id="s3-row5-price-fill" x="540" y="898" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">200</text>
+          <text id="s3-row5-price-stroke" x="540" y="898" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">200</text>
+          <text id="s3-row5-currency" x="680" y="898" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row5-text1" x="490" y="882" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row5-text2" x="490" y="912" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/satsumaimo.png" x="43" y="892" width="135" height="135" transform="rotate(7 110.5 959.5)"/>
-          <rect x="160" y="968" width="350" height="26" fill="url(#markerFade)" transform="rotate(-3 335 981)"/>
-          <text x="165" y="978" font-size="42" font-weight="normal" fill="#5C3317">さつまいも<tspan font-size="26" font-weight="normal" dx="10">(八戸) 1本</tspan></text>
-          <polygon points="535,968 720,968 790,981 720,994 535,994" fill="url(#markerFade)"/>
-          <text x="540" y="978" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
-          <text x="540" y="978" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
-          <text x="680" y="978" font-size="42" fill="#5C3317">円</text>
+          <!-- 行6 -->
+          <image id="s3-row6-image" href="images/products/satsumaimo.png" x="43" y="892" width="135" height="135" transform="rotate(7 110.5 959.5)"/>
+          <rect id="s3-row6-name-marker" x="160" y="968" width="350" height="26" fill="url(#markerFade)" transform="rotate(-3 335 981)"/>
+          <text id="s3-row6-name" x="165" y="978" font-size="42" font-weight="normal" fill="#5C3317">さつまいも<tspan id="s3-row6-unit" font-size="26" font-weight="normal" dx="10">(八戸) 1本</tspan></text>
+          <polygon id="s3-row6-price-marker" points="535,968 720,968 790,981 720,994 535,994" fill="url(#markerFade)"/>
+          <text id="s3-row6-price-fill" x="540" y="978" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">100</text>
+          <text id="s3-row6-price-stroke" x="540" y="978" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">100</text>
+          <text id="s3-row6-currency" x="680" y="978" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row6-text1" x="490" y="962" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row6-text2" x="490" y="992" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/satsumaimo.png" x="43" y="972" width="135" height="135" transform="rotate(6 110.5 1039.5)"/>
-          <rect x="160" y="1048" width="325" height="26" fill="url(#markerFade)" transform="rotate(-3 322.5 1061)"/>
-          <text x="165" y="1058" font-size="42" font-weight="normal" fill="#5C3317">シルクスィート<tspan font-size="26" font-weight="normal" dx="10">1箱</tspan></text>
-          <polygon points="535,1048 720,1048 790,1061 720,1074 535,1074" fill="url(#markerFade)"/>
-          <text x="540" y="1058" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">500</text>
-          <text x="540" y="1058" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">500</text>
-          <text x="680" y="1058" font-size="42" fill="#5C3317">円</text>
+          <!-- 行7 -->
+          <image id="s3-row7-image" href="images/products/satsumaimo.png" x="43" y="972" width="135" height="135" transform="rotate(6 110.5 1039.5)"/>
+          <rect id="s3-row7-name-marker" x="160" y="1048" width="325" height="26" fill="url(#markerFade)" transform="rotate(-3 322.5 1061)"/>
+          <text id="s3-row7-name" x="165" y="1058" font-size="42" font-weight="normal" fill="#5C3317">シルクスィート<tspan id="s3-row7-unit" font-size="26" font-weight="normal" dx="10">1箱</tspan></text>
+          <polygon id="s3-row7-price-marker" points="535,1048 720,1048 790,1061 720,1074 535,1074" fill="url(#markerFade)"/>
+          <text id="s3-row7-price-fill" x="540" y="1058" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)">500</text>
+          <text id="s3-row7-price-stroke" x="540" y="1058" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1">500</text>
+          <text id="s3-row7-currency" x="680" y="1058" font-size="42" fill="#5C3317">円</text>
+          <text id="s3-row7-text1" x="490" y="1042" font-size="26" fill="#5C3317" style="display:none"></text>
+          <text id="s3-row7-text2" x="490" y="1072" font-size="26" fill="#5C3317" style="display:none"></text>
 
-          <image href="images/products/takenoko.png" x="43" y="1052" width="135" height="135"/>
-          <rect x="160" y="1128" width="265" height="26" fill="url(#markerFade)" transform="rotate(-3 292.5 1141)"/>
-          <text x="165" y="1138" font-size="42" font-weight="normal" fill="#5C3317">筍(タケノコ)<tspan font-size="26" font-weight="normal" dx="10">S〜L</tspan></text>
-          <text x="490" y="1122" font-size="26" fill="#5C3317">各種サイズ早い</text>
-          <text x="490" y="1152" font-size="26" fill="#5C3317">者勝ちでご用意</text>
+          <!-- 行8 (初期はtext2lineモード) -->
+          <image id="s3-row8-image" href="images/products/takenoko.png" x="43" y="1052" width="135" height="135"/>
+          <rect id="s3-row8-name-marker" x="160" y="1128" width="265" height="26" fill="url(#markerFade)" transform="rotate(-3 292.5 1141)"/>
+          <text id="s3-row8-name" x="165" y="1138" font-size="42" font-weight="normal" fill="#5C3317">筍(タケノコ)<tspan id="s3-row8-unit" font-size="26" font-weight="normal" dx="10">S〜L</tspan></text>
+          <polygon id="s3-row8-price-marker" points="535,1128 720,1128 790,1141 720,1154 535,1154" fill="url(#markerFade)" style="display:none"/>
+          <text id="s3-row8-price-fill" x="540" y="1138" font-size="64" font-weight="bold" fill="#e8342a" filter="url(#crayon)" style="display:none">0</text>
+          <text id="s3-row8-price-stroke" x="540" y="1138" font-size="64" font-weight="bold" fill="none" stroke="#3d1a10" stroke-width="1" style="display:none">0</text>
+          <text id="s3-row8-currency" x="680" y="1138" font-size="42" fill="#5C3317" style="display:none">円</text>
+          <text id="s3-row8-text1" x="490" y="1122" font-size="26" fill="#5C3317">各種サイズ早い</text>
+          <text id="s3-row8-text2" x="490" y="1152" font-size="26" fill="#5C3317">者勝ちでご用意</text>
+
+          <!-- 空スロットプレースホルダー (8スロット分、デフォルトは非表示) -->
+          <text id="s3-slot1-empty" x="165" y="578" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot2-empty" x="165" y="658" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot3-empty" x="165" y="738" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot4-empty" x="165" y="818" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot5-empty" x="165" y="898" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot6-empty" x="165" y="978" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot7-empty" x="165" y="1058" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+          <text id="s3-slot8-empty" x="165" y="1138" font-size="42" font-weight="normal" fill="#5C3317" textLength="555" lengthAdjust="spacing" style="display:none">・・・・・・・</text>
+
           <g filter="url(#crayon)">
-            <text x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
+            <text id="s3-heart-fill" x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="url(#heartLight)" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
           </g>
           <g>
-            <text x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
+            <text id="s3-heart-stroke" x="690" y="1152" font-size="36" text-anchor="middle" font-family="serif" fill="none" stroke="#3d1a10" stroke-width="1" transform="rotate(15 690 1152) translate(690 1152) scale(0.81 1) translate(-690 -1152)">♥</text>
           </g>
         </g>
 
@@ -457,8 +642,8 @@
 
         <!-- ===== フッター 注意書き (ブロック③ 枠外) ===== -->
         <g font-family="RiiCookieR, sans-serif">
-          <text x="80" y="1190" font-size="22" fill="#5C3317">・いちごは1家族様につき、最大5ケースまで。</text>
-          <text x="80" y="1222" font-size="22" fill="#5C3317">・業者様と思われる方による大量購入は、禁止とさせていただきます。</text>
+          <text id="s3-footer1" x="80" y="1190" font-size="22" fill="#5C3317">・いちごは1家族様につき、最大5ケースまで。</text>
+          <text id="s3-footer2" x="80" y="1222" font-size="22" fill="#5C3317">・業者様と思われる方による大量購入は、禁止とさせていただきます。</text>
           <text x="1340.5" y="1190" text-anchor="middle" font-size="30.8" fill="#5C3317">ここに掲載していない商品も多数用意してます！</text>
         </g>
       </svg>
@@ -703,7 +888,15 @@
       var t = this.getAttribute('data-tab');
       for (var j = 0; j < btns.length; j++) btns[j].classList.toggle('active', btns[j] === this);
       for (var k = 0; k < pans.length; k++) pans[k].classList.toggle('active', pans[k].getAttribute('data-panel') === t);
-      if (t === 'preview') setTimeout(function(){ updateT3BPosition(); updateCurrencyPosition(); }, 50);
+      if (t === 'preview') setTimeout(function(){
+        updateT3BPosition();
+        updateCurrencyPosition();
+        if (typeof updateS2MainCurrencyPosition === 'function') updateS2MainCurrencyPosition();
+        if (typeof updateS2SubRowPositions === 'function') updateS2SubRowPositions();
+        if (typeof updateS3RowCurrencyPosition === 'function') {
+          for (var r = 1; r <= 8; r++) updateS3RowCurrencyPosition(r);
+        }
+      }, 50);
     });
   }
 })();
@@ -956,11 +1149,913 @@ function bindS1Events() {
   });
 }
 
+// ============================================================
+// ===== セクター② 状態管理・UIバインド =====
+// ============================================================
+var SEC2_DEFAULT = {
+  t1_headline: '大特価！',
+  t2_1_sub1: 'いちご品種色々',
+  t2_2_sub2: '早い者勝ち！',
+  t3a_name: 'いちご',
+  t4a_qty_num: 1,
+  t4b_qty_unit: '',
+  t4c_price_num: 300,
+  t4d_currency: '円',
+  t5a_sub_qty_num: 4,
+  t5b_sub_qty_unit: 'パック',
+  t5c_sub_price_num: 1000,
+  t5d_sub_currency: '円',
+  t5e_sub_comment: 'お得!',
+  i1_image: 'ichigo_red.png'
+};
+var S2 = Object.assign({}, SEC2_DEFAULT);
+
+// ===== S2 初期y座標（_preview_frame.html 実測値）=====
+var S2_INIT_Y = {
+  sub1: 220,
+  sub2: 280,
+  name: 365,
+  price: 380,
+  currency: 365
+};
+var S2_T2_GAP = S2_INIT_Y.sub2 - S2_INIT_Y.sub1;  // = 60
+var S2_T2_SHIFT = Math.round(S2_T2_GAP / 4);      // = 15
+
+// ===== ヘルパ =====
+function fmtComma(n) {
+  if (n === null || n === '' || isNaN(n)) return '';
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function setHeadlineRotate(el, text) {
+  var last = text.slice(-1);
+  if (last === '！' || last === '!') {
+    var arr = [];
+    for (var i = 0; i < text.length - 1; i++) arr.push('0');
+    arr.push('8');
+    el.setAttribute('rotate', arr.join(' '));
+  } else {
+    el.removeAttribute('rotate');
+  }
+}
+
+function measureTextWidth(el, fallbackRatio) {
+  if (!el || !el.textContent) return 0;
+  var w = 0;
+  try { w = el.getComputedTextLength(); } catch(e) {}
+  if (!w) { try { w = el.getBBox().width; } catch(e) {} }
+  if (!w) {
+    var fs = parseFloat(el.getAttribute('font-size')) || 40;
+    w = el.textContent.length * fs * (fallbackRatio || 0.7);
+  }
+  return w;
+}
+
+// ===== S2 画像カスケード =====
+function populateS2ImageCategorySelect() {
+  if (!IMAGE_LIB) return;
+  var sel = $id('s2-f-img-cat');
+  sel.innerHTML = '';
+  for (var ck in IMAGE_LIB.categories) {
+    var c = IMAGE_LIB.categories[ck];
+    var opt = document.createElement('option');
+    opt.value = ck;
+    opt.textContent = c.label;
+    sel.appendChild(opt);
+  }
+}
+function populateS2ImageSubcategorySelect(catKey) {
+  var sel = $id('s2-f-img-sub');
+  sel.innerHTML = '';
+  if (!IMAGE_LIB) return;
+  var c = IMAGE_LIB.categories[catKey];
+  if (!c) return;
+  for (var sk in c.subcategories) {
+    var s = c.subcategories[sk];
+    var opt = document.createElement('option');
+    opt.value = sk;
+    opt.textContent = s.label;
+    sel.appendChild(opt);
+  }
+}
+function populateS2ImageItemSelect(catKey, subKey) {
+  var sel = $id('s2-f-img-item');
+  sel.innerHTML = '';
+  if (!IMAGE_LIB) return;
+  var c = IMAGE_LIB.categories[catKey];
+  if (!c) return;
+  var s = c.subcategories[subKey];
+  if (!s) return;
+  for (var i = 0; i < s.items.length; i++) {
+    var it = s.items[i];
+    var opt = document.createElement('option');
+    opt.value = it.file;
+    opt.textContent = it.label + ' (' + it.file.replace('.png','') + ')';
+    sel.appendChild(opt);
+  }
+}
+function syncS2ImageCascadeToFile(file) {
+  var loc = findImageLocation(file);
+  if (!loc) return false;
+  $id('s2-f-img-cat').value = loc.cat;
+  populateS2ImageSubcategorySelect(loc.cat);
+  $id('s2-f-img-sub').value = loc.sub;
+  populateS2ImageItemSelect(loc.cat, loc.sub);
+  $id('s2-f-img-item').value = loc.file;
+  $id('s2-f-img-preview').src = 'images/products/' + loc.file;
+  return true;
+}
+
+// ===== S2 自由入力欄表示制御 =====
+function updateS2QtyUnitCustomVisibility() {
+  $id('s2-f-qtyunit-custom-wrap').classList.toggle('show', $id('s2-f-qtyunit').value === '__custom__');
+}
+function updateS2CurrencyCustomVisibility() {
+  $id('s2-f-currency-custom-wrap').classList.toggle('show', $id('s2-f-currency').value === '__custom__');
+}
+function updateS2SubQtyUnitCustomVisibility() {
+  $id('s2-f-subqtyunit-custom-wrap').classList.toggle('show', $id('s2-f-subqtyunit').value === '__custom__');
+}
+function updateS2SubCurrencyCustomVisibility() {
+  $id('s2-f-subcurrency-custom-wrap').classList.toggle('show', $id('s2-f-subcurrency').value === '__custom__');
+}
+function resolveS2QtyUnit() {
+  var v = $id('s2-f-qtyunit').value;
+  return v === '__custom__' ? ($id('s2-f-qtyunit-custom').value || '') : v;
+}
+function resolveS2Currency() {
+  var v = $id('s2-f-currency').value;
+  return v === '__custom__' ? ($id('s2-f-currency-custom').value || '') : v;
+}
+function resolveS2SubQtyUnit() {
+  var v = $id('s2-f-subqtyunit').value;
+  return v === '__custom__' ? ($id('s2-f-subqtyunit-custom').value || '') : v;
+}
+function resolveS2SubCurrency() {
+  var v = $id('s2-f-subcurrency').value;
+  return v === '__custom__' ? ($id('s2-f-subcurrency-custom').value || '') : v;
+}
+
+// ===== S2 SVG更新 =====
+function updateS2SVG() {
+  var hf = $id('s2-headline-fill'), hs = $id('s2-headline-stroke');
+  hf.textContent = S2.t1_headline;
+  hs.textContent = S2.t1_headline;
+  setHeadlineRotate(hf, S2.t1_headline);
+  setHeadlineRotate(hs, S2.t1_headline);
+
+  $id('s2-sub1').textContent = S2.t2_1_sub1;
+  $id('s2-sub2').textContent = S2.t2_2_sub2;
+  $id('s2-name').textContent = S2.t3a_name;
+
+  $id('s2-price-fill').textContent = String(S2.t4c_price_num);
+  $id('s2-price-stroke').textContent = String(S2.t4c_price_num);
+  $id('s2-currency').textContent = S2.t4d_currency || '';
+
+  var subqtyShown = !(S2.t5a_sub_qty_num === null || S2.t5a_sub_qty_num === '' || isNaN(S2.t5a_sub_qty_num));
+  $id('s2-subqty').textContent = subqtyShown ? (String(S2.t5a_sub_qty_num) + (S2.t5b_sub_qty_unit || '')) : '';
+
+  var subpriceShown = !(S2.t5c_sub_price_num === null || S2.t5c_sub_price_num === '' || isNaN(S2.t5c_sub_price_num));
+  var subpriceTxt = subpriceShown ? fmtComma(S2.t5c_sub_price_num) : '';
+  $id('s2-subprice-fill').textContent = subpriceTxt;
+  $id('s2-subprice-stroke').textContent = subpriceTxt;
+  $id('s2-subcurrency').textContent = subpriceShown ? (S2.t5d_sub_currency || '') : '';
+
+  var cmt = S2.t5e_sub_comment || '';
+  $id('s2-subcomment').textContent = (subpriceShown && cmt) ? ('(' + cmt + ')') : '';
+
+  $id('s2-main-image').setAttribute('href', 'images/products/' + S2.i1_image);
+
+  updateS2Layout();
+  updateS2MainCurrencyPosition();
+  updateS2SubRowPositions();
+}
+
+// ===== S2 レイアウト動的調整（T2空欄に応じた y座標・visibility） =====
+function updateS2Layout() {
+  var sub1El = $id('s2-sub1');
+  var sub2El = $id('s2-sub2');
+  var nameEl = $id('s2-name');
+  var priceFillEl = $id('s2-price-fill');
+  var priceStrokeEl = $id('s2-price-stroke');
+  var currencyEl = $id('s2-currency');
+  if (!sub1El || !sub2El || !nameEl || !priceFillEl || !priceStrokeEl || !currencyEl) return;
+
+  var has1 = !!(S2.t2_1_sub1 && S2.t2_1_sub1.length);
+  var has2 = !!(S2.t2_2_sub2 && S2.t2_2_sub2.length);
+
+  var y_sub1, y_sub2, y_name, y_price, y_currency;
+  var show_sub1, show_sub2;
+  var d = S2_T2_GAP;     // 60
+  var s = S2_T2_SHIFT;   // 15
+
+  if (has1 && has2) {
+    // パターンA: 両方入力 → 初期値維持
+    y_sub1 = S2_INIT_Y.sub1;
+    y_sub2 = S2_INIT_Y.sub2;
+    y_name = S2_INIT_Y.name;
+    y_price = S2_INIT_Y.price;
+    y_currency = S2_INIT_Y.currency;
+    show_sub1 = true; show_sub2 = true;
+  } else if (has1 && !has2) {
+    // パターンB: T2-1のみ
+    y_sub1 = S2_INIT_Y.sub1 + s;   // 220+15=235
+    y_sub2 = S2_INIT_Y.sub2;
+    y_name = S2_INIT_Y.name - s;    // 365-15=350
+    y_price = S2_INIT_Y.price - s;  // 380-15=365
+    y_currency = S2_INIT_Y.currency - s; // 365-15=350
+    show_sub1 = true; show_sub2 = false;
+  } else if (!has1 && has2) {
+    // パターンC: T2-2のみ
+    y_sub1 = S2_INIT_Y.sub1;
+    y_sub2 = S2_INIT_Y.sub2 - s;   // 280-15=265
+    y_name = S2_INIT_Y.name - s;
+    y_price = S2_INIT_Y.price - s;
+    y_currency = S2_INIT_Y.currency - s;
+    show_sub1 = false; show_sub2 = true;
+  } else {
+    // パターンD: 両方空欄
+    y_sub1 = S2_INIT_Y.sub1;
+    y_sub2 = S2_INIT_Y.sub2;
+    y_name = S2_INIT_Y.name - d;    // 365-60=305
+    y_price = S2_INIT_Y.price - d;  // 380-60=320
+    y_currency = S2_INIT_Y.currency - d; // 365-60=305
+    show_sub1 = false; show_sub2 = false;
+  }
+
+  sub1El.setAttribute('y', y_sub1);
+  sub2El.setAttribute('y', y_sub2);
+  nameEl.setAttribute('y', y_name);
+  priceFillEl.setAttribute('y', y_price);
+  priceStrokeEl.setAttribute('y', y_price);
+  currencyEl.setAttribute('y', y_currency);
+
+  sub1El.style.display = show_sub1 ? '' : 'none';
+  sub2El.style.display = show_sub2 ? '' : 'none';
+}
+
+// ===== S2 メイン通貨 円 のx動的追従 =====
+function updateS2MainCurrencyPosition() {
+  var priceStroke = $id('s2-price-stroke');
+  var currency = $id('s2-currency');
+  if (!priceStroke || !currency) return;
+  var priceX = 1290;
+  var priceFontSize = 100;
+  var widthPx = measureTextWidth(priceStroke, 0.6);
+  var halfSpace = priceFontSize * 0.2;
+  currency.setAttribute('x', priceX + widthPx + halfSpace);
+}
+
+// ===== S2 サブ行 (T5a〜T5e) の連動再計算 =====
+function updateS2SubRowPositions() {
+  var subQty = $id('s2-subqty');
+  var subPriceStroke = $id('s2-subprice-stroke');
+  var subPriceFill = $id('s2-subprice-fill');
+  var subCurrency = $id('s2-subcurrency');
+  var subComment = $id('s2-subcomment');
+  if (!subQty || !subPriceStroke || !subCurrency || !subComment) return;
+
+  var baseX = 1007;
+  var subFontSize = 40;
+  var gap = subFontSize * 0.35; // 14px
+
+  // subqty
+  var qtyW = measureTextWidth(subQty, 0.7);
+  // subprice開始位置: subqtyが空ならbaseX、あればbaseX+qtyW+gap
+  var priceX = baseX + qtyW + (qtyW > 0 ? gap : 0);
+  subPriceStroke.setAttribute('x', priceX);
+  subPriceFill.setAttribute('x', priceX);
+
+  var priceW = measureTextWidth(subPriceStroke, 0.6);
+  var currencyX = priceX + priceW + (priceW > 0 ? gap * 0.5 : 0);
+  subCurrency.setAttribute('x', currencyX);
+
+  var currencyW = measureTextWidth(subCurrency, 0.9);
+  var commentX = currencyX + currencyW + (currencyW > 0 ? gap * 0.5 : 0);
+  subComment.setAttribute('x', commentX);
+}
+
+// ===== S2 状態→フォーム反映 =====
+function loadS2FormFromState() {
+  $id('s2-f-headline').value = S2.t1_headline;
+  $id('s2-f-sub1').value = S2.t2_1_sub1;
+  $id('s2-f-sub2').value = S2.t2_2_sub2;
+  $id('s2-f-name').value = S2.t3a_name;
+
+  $id('s2-f-qtynum').value = S2.t4a_qty_num;
+  if (QTY_UNITS.indexOf(S2.t4b_qty_unit) >= 0 || S2.t4b_qty_unit === '') {
+    $id('s2-f-qtyunit').value = S2.t4b_qty_unit;
+    $id('s2-f-qtyunit-custom').value = '';
+  } else {
+    $id('s2-f-qtyunit').value = '__custom__';
+    $id('s2-f-qtyunit-custom').value = S2.t4b_qty_unit;
+  }
+  updateS2QtyUnitCustomVisibility();
+
+  $id('s2-f-pricenum').value = S2.t4c_price_num;
+  if (CURRENCY_UNITS.indexOf(S2.t4d_currency) >= 0 || S2.t4d_currency === '') {
+    $id('s2-f-currency').value = S2.t4d_currency;
+    $id('s2-f-currency-custom').value = '';
+  } else {
+    $id('s2-f-currency').value = '__custom__';
+    $id('s2-f-currency-custom').value = S2.t4d_currency;
+  }
+  updateS2CurrencyCustomVisibility();
+
+  $id('s2-f-subqtynum').value = (S2.t5a_sub_qty_num === null || isNaN(S2.t5a_sub_qty_num)) ? '' : S2.t5a_sub_qty_num;
+  if (QTY_UNITS.indexOf(S2.t5b_sub_qty_unit) >= 0 || S2.t5b_sub_qty_unit === '') {
+    $id('s2-f-subqtyunit').value = S2.t5b_sub_qty_unit;
+    $id('s2-f-subqtyunit-custom').value = '';
+  } else {
+    $id('s2-f-subqtyunit').value = '__custom__';
+    $id('s2-f-subqtyunit-custom').value = S2.t5b_sub_qty_unit;
+  }
+  updateS2SubQtyUnitCustomVisibility();
+
+  $id('s2-f-subpricenum').value = (S2.t5c_sub_price_num === null || isNaN(S2.t5c_sub_price_num)) ? '' : S2.t5c_sub_price_num;
+  if (CURRENCY_UNITS.indexOf(S2.t5d_sub_currency) >= 0 || S2.t5d_sub_currency === '') {
+    $id('s2-f-subcurrency').value = S2.t5d_sub_currency;
+    $id('s2-f-subcurrency-custom').value = '';
+  } else {
+    $id('s2-f-subcurrency').value = '__custom__';
+    $id('s2-f-subcurrency-custom').value = S2.t5d_sub_currency;
+  }
+  updateS2SubCurrencyCustomVisibility();
+
+  $id('s2-f-subcomment').value = S2.t5e_sub_comment;
+
+  syncS2ImageCascadeToFile(S2.i1_image);
+}
+
+// ===== S2 フォーム→状態反映 =====
+function applyS2FromForm() {
+  S2.t1_headline = $id('s2-f-headline').value;
+  S2.t2_1_sub1 = $id('s2-f-sub1').value;
+  S2.t2_2_sub2 = $id('s2-f-sub2').value;
+  S2.t3a_name = $id('s2-f-name').value;
+  var qv = parseInt($id('s2-f-qtynum').value, 10);
+  S2.t4a_qty_num = isNaN(qv) ? 0 : qv;
+  S2.t4b_qty_unit = resolveS2QtyUnit();
+  var pv = parseInt($id('s2-f-pricenum').value, 10);
+  S2.t4c_price_num = isNaN(pv) ? 0 : pv;
+  S2.t4d_currency = resolveS2Currency();
+
+  var sqStr = $id('s2-f-subqtynum').value;
+  S2.t5a_sub_qty_num = (sqStr === '' || sqStr === null) ? null : parseInt(sqStr, 10);
+  if (isNaN(S2.t5a_sub_qty_num)) S2.t5a_sub_qty_num = null;
+  S2.t5b_sub_qty_unit = resolveS2SubQtyUnit();
+
+  var spStr = $id('s2-f-subpricenum').value;
+  S2.t5c_sub_price_num = (spStr === '' || spStr === null) ? null : parseInt(spStr, 10);
+  if (isNaN(S2.t5c_sub_price_num)) S2.t5c_sub_price_num = null;
+  S2.t5d_sub_currency = resolveS2SubCurrency();
+
+  S2.t5e_sub_comment = $id('s2-f-subcomment').value;
+  S2.i1_image = $id('s2-f-img-item').value || S2.i1_image;
+  updateS2SVG();
+}
+
+// ===== S2 イベントバインド =====
+function bindS2Events() {
+  var textIds = [
+    's2-f-headline','s2-f-sub1','s2-f-sub2','s2-f-name',
+    's2-f-qtynum','s2-f-pricenum','s2-f-qtyunit-custom','s2-f-currency-custom',
+    's2-f-subqtynum','s2-f-subpricenum','s2-f-subqtyunit-custom','s2-f-subcurrency-custom',
+    's2-f-subcomment'
+  ];
+  textIds.forEach(function(id){ $id(id).addEventListener('input', applyS2FromForm); });
+  $id('s2-f-qtyunit').addEventListener('change', function(){ updateS2QtyUnitCustomVisibility(); applyS2FromForm(); });
+  $id('s2-f-currency').addEventListener('change', function(){ updateS2CurrencyCustomVisibility(); applyS2FromForm(); });
+  $id('s2-f-subqtyunit').addEventListener('change', function(){ updateS2SubQtyUnitCustomVisibility(); applyS2FromForm(); });
+  $id('s2-f-subcurrency').addEventListener('change', function(){ updateS2SubCurrencyCustomVisibility(); applyS2FromForm(); });
+
+  $id('s2-f-img-cat').addEventListener('change', function(){
+    var cat = this.value;
+    populateS2ImageSubcategorySelect(cat);
+    var c = IMAGE_LIB.categories[cat];
+    var firstSub = c ? Object.keys(c.subcategories)[0] : null;
+    if (firstSub) {
+      $id('s2-f-img-sub').value = firstSub;
+      populateS2ImageItemSelect(cat, firstSub);
+      var firstItem = c.subcategories[firstSub].items[0];
+      if (firstItem) {
+        $id('s2-f-img-item').value = firstItem.file;
+        $id('s2-f-img-preview').src = 'images/products/' + firstItem.file;
+      }
+    }
+    applyS2FromForm();
+  });
+  $id('s2-f-img-sub').addEventListener('change', function(){
+    var cat = $id('s2-f-img-cat').value;
+    populateS2ImageItemSelect(cat, this.value);
+    var s = IMAGE_LIB.categories[cat].subcategories[this.value];
+    var firstItem = s ? s.items[0] : null;
+    if (firstItem) {
+      $id('s2-f-img-item').value = firstItem.file;
+      $id('s2-f-img-preview').src = 'images/products/' + firstItem.file;
+    }
+    applyS2FromForm();
+  });
+  $id('s2-f-img-item').addEventListener('change', function(){
+    $id('s2-f-img-preview').src = 'images/products/' + this.value;
+    applyS2FromForm();
+  });
+}
+
+// ============================================================
+// ===== セクター③ 状態管理・UIバインド =====
+// ============================================================
+var SEC3_DEFAULT = {
+  t0_headline: '今週の野菜ラインナップ',
+  rows: [
+    {mode:'normal', image:'ninniku.png',    name:'にんにく',       unit:'1袋(在庫限り)', price_num:100, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'tamanegi.png',   name:'玉ねぎ',         unit:'(ひね) 1袋',    price_num:100, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'ninjin.png',     name:'人参',           unit:'1袋(4本入)',    price_num:100, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'piman.png',      name:'ピーマン',       unit:'1袋',           price_num:100, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'nagaimo.png',    name:'ながいも',       unit:'(八戸) 1袋',    price_num:200, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'satsumaimo.png', name:'さつまいも',     unit:'(八戸) 1本',    price_num:100, currency:'円', text_line1:'', text_line2:''},
+    {mode:'normal', image:'satsumaimo.png', name:'シルクスィート', unit:'1箱',           price_num:500, currency:'円', text_line1:'', text_line2:''},
+    {mode:'text2line', image:'takenoko.png', name:'筍(タケノコ)',  unit:'S〜L',          price_num:0,   currency:'円', text_line1:'各種サイズ早い', text_line2:'者勝ちでご用意'}
+  ],
+  footer1: '・いちごは1家族様につき、最大5ケースまで。',
+  footer2: '・業者様と思われる方による大量購入は、禁止とさせていただきます。'
+};
+var S3 = JSON.parse(JSON.stringify(SEC3_DEFAULT));
+
+// ===== 行フォームHTML動的生成 =====
+function buildS3RowEditorHTML(idx) {
+  var n = idx + 1;
+  var qtyUnitOptions = '<option value="円">円</option><option value="g">g</option><option value="kg">kg</option><option value="">なし</option><option value="__custom__">自由入力…</option>';
+  var h = '<fieldset class="s3-row-editor" data-row="' + n + '">';
+  h += '<legend>行' + n + '</legend>';
+  h += '<div class="row"><label style="flex:3">画像';
+  h += '<div class="row" style="margin-top:4px">';
+  h += '<select id="s3-r' + n + '-img-cat" style="flex:1"></select>';
+  h += '<select id="s3-r' + n + '-img-sub" style="flex:1"></select>';
+  h += '<select id="s3-r' + n + '-img-item" style="flex:2"></select>';
+  h += '</div></label>';
+  h += '<img id="s3-r' + n + '-img-preview" class="preview-thumb" alt="">';
+  h += '</div>';
+  h += '<div class="row">';
+  h += '<label style="flex:2">商品名<input type="text" id="s3-r' + n + '-name" maxlength="20"></label>';
+  h += '<label style="flex:2">単位(10字)<input type="text" id="s3-r' + n + '-unit" maxlength="10"></label>';
+  h += '</div>';
+  h += '<div class="mode-radios">モード:';
+  h += '<label><input type="radio" name="s3-r' + n + '-mode" value="normal"> 通常</label>';
+  h += '<label><input type="radio" name="s3-r' + n + '-mode" value="text2line"> 2行テキスト</label>';
+  h += '<label><input type="radio" name="s3-r' + n + '-mode" value="empty"> 無記入(空行)</label>';
+  h += '</div>';
+  h += '<div class="mode-block" id="s3-r' + n + '-normal-block">';
+  h += '<div class="row">';
+  h += '<label style="flex:1">値段(6桁)<input type="number" id="s3-r' + n + '-pricenum" min="0" max="999999"></label>';
+  h += '<label style="flex:1">通貨<select id="s3-r' + n + '-currency">' + qtyUnitOptions + '</select></label>';
+  h += '</div>';
+  h += '<label class="sub-input" id="s3-r' + n + '-currency-custom-wrap">（自由入力）<input type="text" id="s3-r' + n + '-currency-custom"></label>';
+  h += '</div>';
+  h += '<div class="mode-block" id="s3-r' + n + '-text2-block">';
+  h += '<div class="row">';
+  h += '<label style="flex:1">1行目(7字)<input type="text" id="s3-r' + n + '-text1" maxlength="7"></label>';
+  h += '<label style="flex:1">2行目(7字)<input type="text" id="s3-r' + n + '-text2" maxlength="7"></label>';
+  h += '</div>';
+  h += '</div>';
+  h += '</fieldset>';
+  return h;
+}
+
+function injectS3RowEditors() {
+  var container = $id('s3-f-rows-container');
+  if (!container) return;
+  var html = '';
+  for (var i = 0; i < 8; i++) html += buildS3RowEditorHTML(i);
+  container.innerHTML = html;
+}
+
+// ===== S3 画像カスケード（行ごと） =====
+function populateS3RowImageCategorySelect(rowIdx) {
+  if (!IMAGE_LIB) return;
+  var n = rowIdx + 1;
+  var sel = $id('s3-r' + n + '-img-cat');
+  sel.innerHTML = '';
+  for (var ck in IMAGE_LIB.categories) {
+    var c = IMAGE_LIB.categories[ck];
+    var opt = document.createElement('option');
+    opt.value = ck; opt.textContent = c.label;
+    sel.appendChild(opt);
+  }
+}
+function populateS3RowImageSubcategorySelect(rowIdx, catKey) {
+  var n = rowIdx + 1;
+  var sel = $id('s3-r' + n + '-img-sub');
+  sel.innerHTML = '';
+  if (!IMAGE_LIB) return;
+  var c = IMAGE_LIB.categories[catKey]; if (!c) return;
+  for (var sk in c.subcategories) {
+    var s = c.subcategories[sk];
+    var opt = document.createElement('option');
+    opt.value = sk; opt.textContent = s.label;
+    sel.appendChild(opt);
+  }
+}
+function populateS3RowImageItemSelect(rowIdx, catKey, subKey) {
+  var n = rowIdx + 1;
+  var sel = $id('s3-r' + n + '-img-item');
+  sel.innerHTML = '';
+  if (!IMAGE_LIB) return;
+  var c = IMAGE_LIB.categories[catKey]; if (!c) return;
+  var s = c.subcategories[subKey]; if (!s) return;
+  for (var i = 0; i < s.items.length; i++) {
+    var it = s.items[i];
+    var opt = document.createElement('option');
+    opt.value = it.file; opt.textContent = it.label + ' (' + it.file.replace('.png','') + ')';
+    sel.appendChild(opt);
+  }
+}
+function syncS3RowImageCascade(rowIdx, file) {
+  var loc = findImageLocation(file);
+  if (!loc) return false;
+  var n = rowIdx + 1;
+  $id('s3-r' + n + '-img-cat').value = loc.cat;
+  populateS3RowImageSubcategorySelect(rowIdx, loc.cat);
+  $id('s3-r' + n + '-img-sub').value = loc.sub;
+  populateS3RowImageItemSelect(rowIdx, loc.cat, loc.sub);
+  $id('s3-r' + n + '-img-item').value = loc.file;
+  $id('s3-r' + n + '-img-preview').src = 'images/products/' + loc.file;
+  return true;
+}
+
+// ===== S3 自由入力欄表示制御（行ごと） =====
+function updateS3RowCurrencyCustomVisibility(rowIdx) {
+  var n = rowIdx + 1;
+  $id('s3-r' + n + '-currency-custom-wrap').classList.toggle('show', $id('s3-r' + n + '-currency').value === '__custom__');
+}
+function resolveS3RowCurrency(rowIdx) {
+  var n = rowIdx + 1;
+  var v = $id('s3-r' + n + '-currency').value;
+  return v === '__custom__' ? ($id('s3-r' + n + '-currency-custom').value || '') : v;
+}
+
+// ===== 行の商品名＋単位tspan 更新 =====
+function setS3RowNameAndUnit(rowIdx, name, unit) {
+  var n = rowIdx + 1;
+  var nameEl = $id('s3-row' + n + '-name');
+  var unitEl = $id('s3-row' + n + '-unit');
+  if (!nameEl || !unitEl) return;
+  var first = nameEl.firstChild;
+  if (first && first.nodeType === 3) {
+    first.nodeValue = name;
+  } else {
+    nameEl.insertBefore(document.createTextNode(name), nameEl.firstChild);
+  }
+  unitEl.textContent = unit;
+}
+
+// ===== S3 スロット y座標（全8スロットのbaseline）=====
+var S3_ROW_Y = [578, 658, 738, 818, 898, 978, 1058, 1138];
+
+// ===== データ→スロット マッピング（empty行をスキップ、上詰め）=====
+var S3_SLOT_MAP = [null, null, null, null, null, null, null, null];
+
+function computeS3SlotMap() {
+  for (var s = 0; s < 8; s++) S3_SLOT_MAP[s] = null;
+  var slot = 0;
+  for (var i = 0; i < 8; i++) {
+    if (S3.rows[i] && S3.rows[i].mode !== 'empty') {
+      if (slot < 8) S3_SLOT_MAP[slot] = i;
+      slot++;
+    }
+  }
+  return slot;  // visibleCount
+}
+
+// ===== スロットN(1-8)のモードに応じた表示切替 =====
+function applyS3SlotMode(slot) {
+  var n = slot + 1;
+  var dataIdx = S3_SLOT_MAP[slot];
+  var priceEls = [
+    $id('s3-row' + n + '-price-marker'),
+    $id('s3-row' + n + '-price-fill'),
+    $id('s3-row' + n + '-price-stroke'),
+    $id('s3-row' + n + '-currency')
+  ];
+  var textEls = [
+    $id('s3-row' + n + '-text1'),
+    $id('s3-row' + n + '-text2')
+  ];
+  var imageEl = $id('s3-row' + n + '-image');
+  var nameEl = $id('s3-row' + n + '-name');
+  var nameMarkerEl = $id('s3-row' + n + '-name-marker');
+  var emptyEl = $id('s3-slot' + n + '-empty');
+
+  if (dataIdx === null) {
+    // 空スロット: image / name / name-marker / price-marker / 全テキスト を隠す
+    if (imageEl) imageEl.style.display = 'none';
+    if (nameEl) nameEl.style.display = 'none';
+    if (nameMarkerEl) nameMarkerEl.style.display = 'none';
+    priceEls.forEach(function(el){ if (el) el.style.display = 'none'; });
+    textEls.forEach(function(el){ if (el) el.style.display = 'none'; });
+    if (emptyEl) emptyEl.style.display = '';
+    return;
+  }
+  var row = S3.rows[dataIdx];
+  var isText2 = (row.mode === 'text2line');
+  if (imageEl) imageEl.style.display = '';
+  if (nameEl) nameEl.style.display = '';
+  if (nameMarkerEl) nameMarkerEl.style.display = '';
+  priceEls.forEach(function(el){ if (el) el.style.display = isText2 ? 'none' : ''; });
+  textEls.forEach(function(el){ if (el) el.style.display = isText2 ? '' : 'none'; });
+  if (emptyEl) emptyEl.style.display = 'none';
+}
+
+// ===== フォーム側 行モードに応じたブロック/無効化切替（rowIdx = データindex） =====
+function updateS3FormRowState(rowIdx) {
+  var n = rowIdx + 1;
+  var row = S3.rows[rowIdx];
+  if (!row) return;
+  var mode = row.mode;
+  var editor = document.querySelector('.s3-row-editor[data-row="' + n + '"]');
+  if (editor) editor.classList.toggle('is-empty', mode === 'empty');
+  var normalBlock = $id('s3-r' + n + '-normal-block');
+  var text2Block = $id('s3-r' + n + '-text2-block');
+  if (normalBlock) normalBlock.classList.toggle('show', mode === 'normal');
+  if (text2Block) text2Block.classList.toggle('show', mode === 'text2line');
+  // 入力フィールドのdisabled
+  var isEmpty = (mode === 'empty');
+  var inputIds = [
+    's3-r'+n+'-name','s3-r'+n+'-unit','s3-r'+n+'-pricenum',
+    's3-r'+n+'-currency','s3-r'+n+'-currency-custom',
+    's3-r'+n+'-text1','s3-r'+n+'-text2',
+    's3-r'+n+'-img-cat','s3-r'+n+'-img-sub','s3-r'+n+'-img-item'
+  ];
+  inputIds.forEach(function(id){ var el = $id(id); if (el) el.disabled = isEmpty; });
+}
+
+// ===== スロットにデータを描画 =====
+function drawS3DataAtSlot(slot, dataIdx) {
+  var n = slot + 1;
+  var row = S3.rows[dataIdx];
+  if (!row) return;
+  // 画像
+  $id('s3-row' + n + '-image').setAttribute('href', 'images/products/' + row.image);
+  // 商品名+単位
+  setS3RowNameAndUnitOnSlot(slot, row.name || '', row.unit || '');
+  // 価格・通貨
+  $id('s3-row' + n + '-price-fill').textContent = String(row.price_num);
+  $id('s3-row' + n + '-price-stroke').textContent = String(row.price_num);
+  $id('s3-row' + n + '-currency').textContent = row.currency || '';
+  // 2行テキスト
+  $id('s3-row' + n + '-text1').textContent = row.text_line1 || '';
+  $id('s3-row' + n + '-text2').textContent = row.text_line2 || '';
+  // 表示切替
+  applyS3SlotMode(slot);
+}
+
+// スロット用 name+unit 設定（setS3RowNameAndUnit のスロット版）
+function setS3RowNameAndUnitOnSlot(slot, name, unit) {
+  var n = slot + 1;
+  var nameEl = $id('s3-row' + n + '-name');
+  var unitEl = $id('s3-row' + n + '-unit');
+  if (!nameEl || !unitEl) return;
+  var first = nameEl.firstChild;
+  if (first && first.nodeType === 3) {
+    first.nodeValue = name;
+  } else {
+    nameEl.insertBefore(document.createTextNode(name), nameEl.firstChild);
+  }
+  unitEl.textContent = unit;
+}
+
+// ===== スロット空プレースホルダー描画（他要素hideはapplyS3SlotMode内）=====
+function drawS3EmptyAtSlot(slot) {
+  applyS3SlotMode(slot);
+}
+
+// ===== S3 スロット通貨 円 のx動的追従（6桁縮小対応）=====
+// priceX=540, priceFontSize=64, currency fontSize=42 (SVGソース実測値)
+function updateS3RowCurrencyPosition(slotN) {
+  var priceStroke = $id('s3-row' + slotN + '-price-stroke');
+  var currency = $id('s3-row' + slotN + '-currency');
+  if (!priceStroke || !currency) return;
+  var slot = slotN - 1;
+  var dataIdx = S3_SLOT_MAP[slot];
+  if (dataIdx === null || dataIdx === undefined) return; // 空スロット
+  var row = S3.rows[dataIdx];
+  if (!row || row.mode !== 'normal') return; // text2line スキップ
+
+  var priceX = 540;
+  var priceFontSize = 64;
+  var normalCurrencyFontSize = 42;
+  var priceNum = row.price_num || 0;
+  var digits = String(Math.max(0, priceNum)).length;
+
+  // 6桁以上なら円を2/3サイズに縮小
+  var currencyFontSize = (digits >= 6) ? Math.round(normalCurrencyFontSize * 2 / 3) : normalCurrencyFontSize;
+  currency.setAttribute('font-size', currencyFontSize);
+
+  var widthPx = 0;
+  try { widthPx = priceStroke.getComputedTextLength(); } catch(e) {}
+  if (!widthPx) { try { widthPx = priceStroke.getBBox().width; } catch(e) {} }
+  if (!widthPx) widthPx = digits * priceFontSize * 0.6;
+
+  var halfSpace = (digits >= 6) ? -priceFontSize * 0.25 : priceFontSize * 0.2;
+  currency.setAttribute('x', priceX + widthPx + halfSpace);
+
+  // 6桁時は y 座標も下げる（縮小した円を数字の中心〜下寄りに配置）
+  var currencyBaseY = S3_ROW_Y[slot];
+  var yOffset = (digits >= 6) ? 15 : 0;
+  currency.setAttribute('y', currencyBaseY + yOffset);
+}
+
+// ===== ハート♥ 位置更新（表示上の最下段に追従）=====
+function updateS3HeartPosition() {
+  var heartFill = $id('s3-heart-fill');
+  var heartStroke = $id('s3-heart-stroke');
+  if (!heartFill || !heartStroke) return;
+  var visibleCount = 0;
+  for (var s = 0; s < 8; s++) if (S3_SLOT_MAP[s] !== null && S3_SLOT_MAP[s] !== undefined) visibleCount++;
+  if (visibleCount === 0) {
+    heartFill.style.display = 'none';
+    heartStroke.style.display = 'none';
+    return;
+  }
+  heartFill.style.display = '';
+  heartStroke.style.display = '';
+  var lastSlot = visibleCount - 1;
+  // 全行埋まってる(visibleCount===8) → 行8のbaseline (y=S3_ROW_Y[7]+14=1152)
+  // 空行あり → 最下段商品行から 1/2行(40px) 下げて空行側に配置
+  var hx = 690;
+  var hy = (visibleCount === 8)
+    ? S3_ROW_Y[lastSlot] + 14
+    : S3_ROW_Y[lastSlot] + 14 + 40;
+  var t = 'rotate(15 ' + hx + ' ' + hy + ') translate(' + hx + ' ' + hy + ') scale(0.81 1) translate(-' + hx + ' -' + hy + ')';
+  heartFill.setAttribute('x', hx);
+  heartFill.setAttribute('y', hy);
+  heartFill.setAttribute('transform', t);
+  heartStroke.setAttribute('x', hx);
+  heartStroke.setAttribute('y', hy);
+  heartStroke.setAttribute('transform', t);
+}
+
+// ===== S3 SVG更新 =====
+function updateS3SVG() {
+  $id('s3-headline').textContent = S3.t0_headline;
+  // データ→スロット マッピング再計算
+  computeS3SlotMap();
+  // 各スロット描画
+  for (var s = 0; s < 8; s++) {
+    var dataIdx = S3_SLOT_MAP[s];
+    if (dataIdx !== null && dataIdx !== undefined) {
+      drawS3DataAtSlot(s, dataIdx);
+    } else {
+      drawS3EmptyAtSlot(s);
+    }
+  }
+  // フォーム側の行状態（mode切替や無効化）を全行更新
+  for (var i = 0; i < 8; i++) updateS3FormRowState(i);
+  $id('s3-footer1').textContent = S3.footer1;
+  $id('s3-footer2').textContent = S3.footer2;
+  updateS3Decorations();
+  updateS3HeartPosition();
+  for (var r = 1; r <= 8; r++) updateS3RowCurrencyPosition(r);
+}
+
+// ===== 装飾画像の自動採用（スロット繰り上げ対応）=====
+function updateS3Decorations() {
+  // 表示対象（非emptyかつimage有）行を元順で収集
+  var visibleRows = [];
+  for (var i = 0; i < 8; i++) {
+    if (S3.rows[i] && S3.rows[i].mode !== 'empty' && S3.rows[i].image) {
+      visibleRows.push(S3.rows[i]);
+    }
+  }
+  // I-L: 表示上の3段目、なければ最上段
+  var leftImage = null;
+  if (visibleRows[2]) leftImage = visibleRows[2].image;
+  else if (visibleRows[0]) leftImage = visibleRows[0].image;
+  // I-R: 表示上の最下段
+  var rightImage = null;
+  if (visibleRows.length > 0) rightImage = visibleRows[visibleRows.length - 1].image;
+
+  var le = $id('s3-decor-left'), re = $id('s3-decor-right');
+  if (le) {
+    if (leftImage) { le.setAttribute('href', 'images/products/' + leftImage); le.style.display = ''; }
+    else { le.style.display = 'none'; }
+  }
+  if (re) {
+    if (rightImage) { re.setAttribute('href', 'images/products/' + rightImage); re.style.display = ''; }
+    else { re.style.display = 'none'; }
+  }
+}
+
+// ===== S3 状態→フォーム反映 =====
+function loadS3FormFromState() {
+  $id('s3-f-headline').value = S3.t0_headline;
+  for (var i = 0; i < 8; i++) {
+    var row = S3.rows[i];
+    var n = i + 1;
+    $id('s3-r' + n + '-name').value = row.name || '';
+    $id('s3-r' + n + '-unit').value = row.unit || '';
+    // Mode radios
+    var radios = document.getElementsByName('s3-r' + n + '-mode');
+    for (var r = 0; r < radios.length; r++) radios[r].checked = (radios[r].value === (row.mode || 'normal'));
+    // Normal block
+    $id('s3-r' + n + '-pricenum').value = (row.price_num === null || isNaN(row.price_num)) ? '' : row.price_num;
+    if (CURRENCY_UNITS.indexOf(row.currency) >= 0 || row.currency === '') {
+      $id('s3-r' + n + '-currency').value = row.currency || '';
+      $id('s3-r' + n + '-currency-custom').value = '';
+    } else {
+      $id('s3-r' + n + '-currency').value = '__custom__';
+      $id('s3-r' + n + '-currency-custom').value = row.currency || '';
+    }
+    updateS3RowCurrencyCustomVisibility(i);
+    // Text2 block
+    $id('s3-r' + n + '-text1').value = row.text_line1 || '';
+    $id('s3-r' + n + '-text2').value = row.text_line2 || '';
+    // Image cascade
+    syncS3RowImageCascade(i, row.image);
+  }
+  $id('s3-f-footer1').value = S3.footer1;
+  $id('s3-f-footer2').value = S3.footer2;
+}
+
+// ===== S3 フォーム→状態反映 =====
+function applyS3FromForm() {
+  S3.t0_headline = $id('s3-f-headline').value;
+  for (var i = 0; i < 8; i++) {
+    var n = i + 1;
+    var row = S3.rows[i];
+    row.name = $id('s3-r' + n + '-name').value;
+    row.unit = $id('s3-r' + n + '-unit').value;
+    var radios = document.getElementsByName('s3-r' + n + '-mode');
+    for (var r = 0; r < radios.length; r++) if (radios[r].checked) row.mode = radios[r].value;
+    var pv = parseInt($id('s3-r' + n + '-pricenum').value, 10);
+    row.price_num = isNaN(pv) ? 0 : pv;
+    row.currency = resolveS3RowCurrency(i);
+    row.text_line1 = $id('s3-r' + n + '-text1').value;
+    row.text_line2 = $id('s3-r' + n + '-text2').value;
+    var imgVal = $id('s3-r' + n + '-img-item').value;
+    if (imgVal) row.image = imgVal;
+  }
+  S3.footer1 = $id('s3-f-footer1').value;
+  S3.footer2 = $id('s3-f-footer2').value;
+  updateS3SVG();
+}
+
+// ===== S3 イベントバインド =====
+function bindS3Events() {
+  $id('s3-f-headline').addEventListener('input', applyS3FromForm);
+  $id('s3-f-footer1').addEventListener('input', applyS3FromForm);
+  $id('s3-f-footer2').addEventListener('input', applyS3FromForm);
+  for (var i = 0; i < 8; i++) (function(idx){
+    var n = idx + 1;
+    var ids = ['s3-r'+n+'-name','s3-r'+n+'-unit','s3-r'+n+'-pricenum','s3-r'+n+'-currency-custom','s3-r'+n+'-text1','s3-r'+n+'-text2'];
+    ids.forEach(function(id){ $id(id).addEventListener('input', applyS3FromForm); });
+    $id('s3-r'+n+'-currency').addEventListener('change', function(){ updateS3RowCurrencyCustomVisibility(idx); applyS3FromForm(); });
+    var radios = document.getElementsByName('s3-r'+n+'-mode');
+    for (var r = 0; r < radios.length; r++) radios[r].addEventListener('change', applyS3FromForm);
+
+    $id('s3-r'+n+'-img-cat').addEventListener('change', function(){
+      var cat = this.value;
+      populateS3RowImageSubcategorySelect(idx, cat);
+      var c = IMAGE_LIB.categories[cat];
+      var firstSub = c ? Object.keys(c.subcategories)[0] : null;
+      if (firstSub) {
+        $id('s3-r'+n+'-img-sub').value = firstSub;
+        populateS3RowImageItemSelect(idx, cat, firstSub);
+        var firstItem = c.subcategories[firstSub].items[0];
+        if (firstItem) {
+          $id('s3-r'+n+'-img-item').value = firstItem.file;
+          $id('s3-r'+n+'-img-preview').src = 'images/products/' + firstItem.file;
+        }
+      }
+      applyS3FromForm();
+    });
+    $id('s3-r'+n+'-img-sub').addEventListener('change', function(){
+      var cat = $id('s3-r'+n+'-img-cat').value;
+      populateS3RowImageItemSelect(idx, cat, this.value);
+      var s = IMAGE_LIB.categories[cat].subcategories[this.value];
+      var firstItem = s ? s.items[0] : null;
+      if (firstItem) {
+        $id('s3-r'+n+'-img-item').value = firstItem.file;
+        $id('s3-r'+n+'-img-preview').src = 'images/products/' + firstItem.file;
+      }
+      applyS3FromForm();
+    });
+    $id('s3-r'+n+'-img-item').addEventListener('change', function(){
+      $id('s3-r'+n+'-img-preview').src = 'images/products/' + this.value;
+      applyS3FromForm();
+    });
+  })(i);
+}
+
 // ===== localStorage 保存/読込/リセット =====
 function doSave(){
   var data = {
     version: "1.0",
-    sectors: { s1: Object.assign({}, S1) }
+    sectors: {
+      s1: Object.assign({}, S1),
+      s2: Object.assign({}, S2),
+      s3: JSON.parse(JSON.stringify(S3))
+    }
   };
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -975,15 +2070,33 @@ function doLoad(){
     var raw = localStorage.getItem(STORAGE_KEY);
     if (raw === null) { alert('保存データがありません (key: ' + STORAGE_KEY + ')'); return; }
     var data = JSON.parse(raw);
-    if (data && data.sectors && data.sectors.s1) {
-      var s1 = data.sectors.s1;
-      for (var k in SEC1_DEFAULT) { if (k in s1) S1[k] = s1[k]; }
-      loadS1FormFromState();
-      updateS1SVG();
-      alert('読み込みました (key: ' + STORAGE_KEY + ')\n\n' + raw);
-    } else {
-      alert('保存データに s1 が含まれていません:\n\n' + raw);
+    if (!data || !data.sectors) { alert('保存データが不正:\n\n' + raw); return; }
+    var loaded = [];
+    if (data.sectors.s1) {
+      for (var k1 in SEC1_DEFAULT) { if (k1 in data.sectors.s1) S1[k1] = data.sectors.s1[k1]; }
+      loadS1FormFromState(); updateS1SVG();
+      loaded.push('s1');
     }
+    if (data.sectors.s2) {
+      for (var k2 in SEC2_DEFAULT) { if (k2 in data.sectors.s2) S2[k2] = data.sectors.s2[k2]; }
+      loadS2FormFromState(); updateS2SVG();
+      loaded.push('s2');
+    }
+    if (data.sectors.s3) {
+      if (typeof data.sectors.s3.t0_headline === 'string') S3.t0_headline = data.sectors.s3.t0_headline;
+      if (typeof data.sectors.s3.footer1 === 'string') S3.footer1 = data.sectors.s3.footer1;
+      if (typeof data.sectors.s3.footer2 === 'string') S3.footer2 = data.sectors.s3.footer2;
+      if (Array.isArray(data.sectors.s3.rows)) {
+        for (var ri = 0; ri < 8 && ri < data.sectors.s3.rows.length; ri++) {
+          var src = data.sectors.s3.rows[ri] || {};
+          var dst = S3.rows[ri];
+          for (var rk in dst) { if (rk in src) dst[rk] = src[rk]; }
+        }
+      }
+      loadS3FormFromState(); updateS3SVG();
+      loaded.push('s3');
+    }
+    alert('読み込みました [' + loaded.join(', ') + ']\n\n' + raw);
   } catch(e) {
     alert('読み込み失敗: ' + e.message);
   }
@@ -993,9 +2106,16 @@ function doReset(){
   if (!confirm('保存データを削除して初期値に戻しますか？ (key: ' + STORAGE_KEY + ')')) return;
   try {
     localStorage.removeItem(STORAGE_KEY);
-    for (var k in SEC1_DEFAULT) { S1[k] = SEC1_DEFAULT[k]; }
-    loadS1FormFromState();
-    updateS1SVG();
+    for (var k1 in SEC1_DEFAULT) { S1[k1] = SEC1_DEFAULT[k1]; }
+    for (var k2 in SEC2_DEFAULT) { S2[k2] = SEC2_DEFAULT[k2]; }
+    var s3def = JSON.parse(JSON.stringify(SEC3_DEFAULT));
+    S3.t0_headline = s3def.t0_headline;
+    S3.footer1 = s3def.footer1;
+    S3.footer2 = s3def.footer2;
+    for (var ri = 0; ri < 8; ri++) S3.rows[ri] = s3def.rows[ri];
+    loadS1FormFromState(); updateS1SVG();
+    loadS2FormFromState(); updateS2SVG();
+    loadS3FormFromState(); updateS3SVG();
     alert('削除して初期値に戻しました');
   } catch(e) {
     alert('削除失敗: ' + e.message);
@@ -1003,21 +2123,50 @@ function doReset(){
 }
 
 // ===== 初期化 =====
-(function initS1(){
+(function init(){
   if (!IMAGE_LIB) { console.error('IMAGE_LIB not loaded'); return; }
   try {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       var data = JSON.parse(raw);
-      if (data && data.sectors && data.sectors.s1) {
-        for (var k in SEC1_DEFAULT) { if (k in data.sectors.s1) S1[k] = data.sectors.s1[k]; }
+      if (data && data.sectors) {
+        if (data.sectors.s1) {
+          for (var k1 in SEC1_DEFAULT) { if (k1 in data.sectors.s1) S1[k1] = data.sectors.s1[k1]; }
+        }
+        if (data.sectors.s2) {
+          for (var k2 in SEC2_DEFAULT) { if (k2 in data.sectors.s2) S2[k2] = data.sectors.s2[k2]; }
+        }
+        if (data.sectors.s3) {
+          if (typeof data.sectors.s3.t0_headline === 'string') S3.t0_headline = data.sectors.s3.t0_headline;
+          if (typeof data.sectors.s3.footer1 === 'string') S3.footer1 = data.sectors.s3.footer1;
+          if (typeof data.sectors.s3.footer2 === 'string') S3.footer2 = data.sectors.s3.footer2;
+          if (Array.isArray(data.sectors.s3.rows)) {
+            for (var ri = 0; ri < 8 && ri < data.sectors.s3.rows.length; ri++) {
+              var src = data.sectors.s3.rows[ri] || {};
+              var dst = S3.rows[ri];
+              for (var rk in dst) { if (rk in src) dst[rk] = src[rk]; }
+            }
+          }
+        }
       }
     }
   } catch(e) { /* ignore */ }
+
   populateImageCategorySelect();
   loadS1FormFromState();
   bindS1Events();
   updateS1SVG();
+
+  populateS2ImageCategorySelect();
+  loadS2FormFromState();
+  bindS2Events();
+  updateS2SVG();
+
+  injectS3RowEditors();
+  for (var i3 = 0; i3 < 8; i3++) populateS3RowImageCategorySelect(i3);
+  loadS3FormFromState();
+  bindS3Events();
+  updateS3SVG();
 })();
 </script>
 </body>
