@@ -42,6 +42,30 @@
   .sec-tabs button.active{background:#8b6914;color:#fff;border-color:#5a3e1b;box-shadow:0 2px 4px rgba(0,0,0,.15)}
   .sec-panel{display:none}
   .sec-panel.active{display:block}
+  /* ===== 保存一覧 ===== */
+  .saved-item{background:#fff;border:1px solid #ddd;padding:10px 12px;margin:6px 0;border-radius:6px;display:flex;gap:8px;align-items:center}
+  .saved-item .info{flex:1;min-width:0;overflow:hidden}
+  .saved-item .title-text{font-weight:700;color:#5a3e1b;margin-bottom:2px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .saved-item .date{font-size:11px;color:#888}
+  .saved-item button{padding:6px 12px;font-size:12px;font-weight:700;border:none;border-radius:4px;cursor:pointer;color:#fff;flex-shrink:0;font-family:inherit}
+  .saved-item .load-btn{background:#3498db}
+  .saved-item .load-btn:hover{background:#2980b9}
+  .saved-item .del-btn{background:#e74c3c}
+  .saved-item .del-btn:hover{background:#c0392b}
+  /* ===== 印刷用 CSS ===== */
+  @media print {
+    @page { size: A4 landscape; margin: 0; }
+    html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; height: auto !important; }
+    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    /* 編集UI・タブ・ヘッダー・入力/印刷/保存パネル は非表示 */
+    .header, .tabs, .panel[data-panel="edit"], .panel[data-panel="print"], .panel[data-panel="save"] { display: none !important; }
+    /* プレビューパネルを強制表示（現在タブに関係なく）*/
+    .panel[data-panel="preview"] { display: block !important; }
+    .preview-area { padding: 0 !important; background: #fff !important; min-height: 0 !important; margin: 0 !important; }
+    .preview-area .hint { display: none !important; }
+    .flyer-wrap { width: 100vw !important; height: 100vh !important; max-width: none !important; aspect-ratio: 1754 / 1240 !important; box-shadow: none !important; margin: 0 !important; page-break-inside: avoid; }
+    .flyer { inset: 0 !important; }
+  }
   .sec-edit fieldset{border:2px solid #c4a265;border-radius:10px;padding:14px 16px 16px;margin-bottom:12px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06)}
   .sec-edit legend{font-size:13px;font-weight:900;color:#5a3e1b;padding:2px 10px;background:#faf8f4;border:1px solid #c4a265;border-radius:4px}
   .sec-edit label{display:block;margin:10px 0 0;font-size:12px;color:#5a3e1b;font-weight:700}
@@ -770,26 +794,42 @@
 
 <!-- ========== 印刷タブ ========== -->
 <div class="panel" data-panel="print">
-  <div class="placeholder">印刷機能準備中</div>
+  <div class="save-area">
+    <div class="box">
+      <h3>🖨 A4横 印刷</h3>
+      <p>このチラシ（2ページ目）を A4 横向きで印刷します。ブラウザの印刷ダイアログで以下を選択してください:<br>
+      ・用紙: A4 / 向き: 横<br>
+      ・余白: なし（ない場合は「最小」）<br>
+      ・<strong>背景のグラフィック: チェック ON</strong>（背景画像を印刷するため）<br>
+      ・「送信先: PDF に保存」を選べば PDF 出力も可能</p>
+      <button class="btn btn-save" onclick="doPrint()">🖨 印刷ダイアログを開く</button>
+    </div>
+    <div class="box">
+      <h3>💡 推奨環境</h3>
+      <p>Chrome / Edge / Safari の最新版を推奨。<br>
+      文字のずれや背景が出ない場合は上記設定を再確認してください。</p>
+    </div>
+  </div>
 </div>
 
 <!-- ========== 保存タブ ========== -->
 <div class="panel" data-panel="save">
   <div class="save-area">
     <div class="box">
-      <h3>💾 データを保存</h3>
-      <p>現在のデータをブラウザ内に保存します<br>localStorage key: <code>souka_flyer_v2_data</code></p>
-      <button class="btn btn-save" onclick="doSave()">💾 保存する</button>
+      <h3>💾 新規保存</h3>
+      <p>タイトルを付けて保存します。保存日時は自動で記録されます。</p>
+      <label style="display:block;margin:8px 0 4px;font-size:12px;color:#5a3e1b;font-weight:700">保存タイトル</label>
+      <input type="text" id="save-title-input" placeholder="例: 2026-04-26 週末セール" maxlength="40" style="width:100%;padding:10px;font-size:14px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;font-family:inherit;margin-bottom:10px">
+      <button class="btn btn-save" onclick="doSaveWithTitle()">💾 保存する</button>
     </div>
     <div class="box">
-      <h3>📂 データを読み込み</h3>
-      <p>保存済みのデータを確認します</p>
-      <button class="btn btn-load" onclick="doLoad()">📂 読み込む</button>
+      <h3>📂 保存済みデータ（新しい順）</h3>
+      <div id="saved-list"><p style="color:#888;font-size:12px">読み込み中…</p></div>
     </div>
     <div class="box">
-      <h3>🗑 データをリセット</h3>
-      <p>保存済みデータを削除します</p>
-      <button class="btn btn-reset" onclick="doReset()">🗑 リセット</button>
+      <h3>🗑 編集中データを初期値に戻す</h3>
+      <p>現在編集中の内容だけを初期値にリセットします（保存済みデータは削除されません）。</p>
+      <button class="btn btn-reset" onclick="doReset()">🗑 編集をリセット</button>
     </div>
   </div>
 </div>
@@ -3295,6 +3335,187 @@ function bindS8Events() {
 }
 
 // ===== localStorage 保存/読込/リセット =====
+// ===== 印刷 =====
+function doPrint(){
+  // 動的位置（円・name-marker 等）を印刷前に再計算
+  try {
+    if (typeof updateT3BPosition === 'function') updateT3BPosition();
+    if (typeof updateCurrencyPosition === 'function') updateCurrencyPosition();
+    if (typeof updateS2MainCurrencyPosition === 'function') updateS2MainCurrencyPosition();
+    if (typeof updateS2SubRowPositions === 'function') updateS2SubRowPositions();
+    if (typeof updateS3RowCurrencyPosition === 'function') {
+      for (var r = 1; r <= 8; r++) updateS3RowCurrencyPosition(r);
+    }
+    if (typeof updateS4RowCurrencyPosition === 'function') {
+      for (var r4 = 1; r4 <= 3; r4++) updateS4RowCurrencyPosition(r4);
+    }
+    if (typeof updateS5RowCurrencyPosition === 'function') {
+      for (var r5 = 1; r5 <= 3; r5++) updateS5RowCurrencyPosition(r5);
+    }
+    if (typeof updateS5NameMarker === 'function') {
+      for (var m5 = 0; m5 < 3; m5++) updateS5NameMarker(m5);
+    }
+  } catch(e) {}
+  setTimeout(function(){ window.print(); }, 100);
+}
+
+// ===== 複数保存機能（タイトル付き、日時自動）=====
+var SAVES_KEY = 'souka_flyer_v2_saves';
+
+function getAllSaves() {
+  try {
+    var raw = localStorage.getItem(SAVES_KEY);
+    return raw ? (JSON.parse(raw) || []) : [];
+  } catch(e) { return []; }
+}
+function setAllSaves(saves) {
+  try { localStorage.setItem(SAVES_KEY, JSON.stringify(saves)); } catch(e) {}
+}
+
+function buildCurrentSaveData() {
+  return {
+    version: "1.0",
+    sectors: {
+      s1: Object.assign({}, S1),
+      s2: Object.assign({}, S2),
+      s3: JSON.parse(JSON.stringify(S3)),
+      s4: JSON.parse(JSON.stringify(S4)),
+      s5: JSON.parse(JSON.stringify(S5)),
+      s8: Object.assign({}, S8)
+    }
+  };
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function doSaveWithTitle() {
+  var titleInput = $id('save-title-input');
+  if (!titleInput) return;
+  var title = (titleInput.value || '').trim();
+  if (!title) { alert('タイトルを入力してください'); titleInput.focus(); return; }
+  var saves = getAllSaves();
+  var entry = {
+    id: String(Date.now()) + '_' + Math.random().toString(36).slice(2, 8),
+    title: title,
+    savedAt: new Date().toISOString(),
+    data: buildCurrentSaveData()
+  };
+  saves.push(entry);
+  setAllSaves(saves);
+  titleInput.value = '';
+  renderSaveList();
+  alert('「' + title + '」を保存しました');
+}
+
+function applyLoadedData(d) {
+  if (!d || !d.sectors) return false;
+  if (d.sectors.s1) {
+    for (var k1 in SEC1_DEFAULT) { if (k1 in d.sectors.s1) S1[k1] = d.sectors.s1[k1]; }
+    loadS1FormFromState(); updateS1SVG();
+  }
+  if (d.sectors.s2) {
+    for (var k2 in SEC2_DEFAULT) { if (k2 in d.sectors.s2) S2[k2] = d.sectors.s2[k2]; }
+    loadS2FormFromState(); updateS2SVG();
+  }
+  if (d.sectors.s3) {
+    if (typeof d.sectors.s3.t0_headline === 'string') S3.t0_headline = d.sectors.s3.t0_headline;
+    if (typeof d.sectors.s3.footer1 === 'string') S3.footer1 = d.sectors.s3.footer1;
+    if (typeof d.sectors.s3.footer2 === 'string') S3.footer2 = d.sectors.s3.footer2;
+    if (Array.isArray(d.sectors.s3.rows)) {
+      for (var ri = 0; ri < 8 && ri < d.sectors.s3.rows.length; ri++) {
+        var src = d.sectors.s3.rows[ri] || {};
+        var dst = S3.rows[ri];
+        for (var rk in dst) { if (rk in src) dst[rk] = src[rk]; }
+      }
+    }
+    loadS3FormFromState(); updateS3SVG();
+  }
+  if (d.sectors.s4) {
+    if (typeof d.sectors.s4.t0_headline === 'string') S4.t0_headline = d.sectors.s4.t0_headline;
+    if (Array.isArray(d.sectors.s4.rows)) {
+      for (var ri4 = 0; ri4 < 3 && ri4 < d.sectors.s4.rows.length; ri4++) {
+        var src4 = d.sectors.s4.rows[ri4] || {};
+        var dst4 = S4.rows[ri4];
+        for (var rk4 in dst4) { if (rk4 in src4) dst4[rk4] = src4[rk4]; }
+      }
+    }
+    loadS4FormFromState(); updateS4SVG();
+  }
+  if (d.sectors.s5) {
+    if (typeof d.sectors.s5.t0_headline === 'string') S5.t0_headline = d.sectors.s5.t0_headline;
+    if (typeof d.sectors.s5.footer === 'string') S5.footer = d.sectors.s5.footer;
+    if (Array.isArray(d.sectors.s5.rows)) {
+      for (var ri5 = 0; ri5 < 3 && ri5 < d.sectors.s5.rows.length; ri5++) {
+        var src5 = d.sectors.s5.rows[ri5] || {};
+        var dst5 = S5.rows[ri5];
+        for (var rk5 in dst5) { if (rk5 in src5) dst5[rk5] = src5[rk5]; }
+      }
+    }
+    loadS5FormFromState(); updateS5SVG();
+  }
+  if (d.sectors.s8) {
+    for (var k8 in SEC8_DEFAULT) { if (k8 in d.sectors.s8) S8[k8] = d.sectors.s8[k8]; }
+    loadS8FormFromState(); updateS8SVG();
+  }
+  return true;
+}
+
+function loadSavedItem(id) {
+  var saves = getAllSaves();
+  var entry = null;
+  for (var i = 0; i < saves.length; i++) if (saves[i].id === id) { entry = saves[i]; break; }
+  if (!entry) { alert('データが見つかりません'); return; }
+  if (!confirm('「' + entry.title + '」を読み込みますか？\n現在の編集内容は上書きされます。')) return;
+  if (applyLoadedData(entry.data)) {
+    alert('「' + entry.title + '」を読み込みました');
+  } else {
+    alert('データが不正で読み込めませんでした');
+  }
+}
+
+function deleteSavedItem(id) {
+  var saves = getAllSaves();
+  var entry = null;
+  for (var i = 0; i < saves.length; i++) if (saves[i].id === id) { entry = saves[i]; break; }
+  if (!entry) return;
+  if (!confirm('「' + entry.title + '」を削除しますか？')) return;
+  var filtered = [];
+  for (var j = 0; j < saves.length; j++) if (saves[j].id !== id) filtered.push(saves[j]);
+  setAllSaves(filtered);
+  renderSaveList();
+}
+
+function renderSaveList() {
+  var container = $id('saved-list');
+  if (!container) return;
+  var saves = getAllSaves();
+  if (saves.length === 0) {
+    container.innerHTML = '<p style="color:#888;font-size:12px;margin:4px 0">保存されたデータはありません</p>';
+    return;
+  }
+  saves.sort(function(a, b){ return (b.savedAt || '').localeCompare(a.savedAt || ''); });
+  var html = '';
+  for (var i = 0; i < saves.length; i++) {
+    var s = saves[i];
+    var dateStr = '';
+    try {
+      var d = new Date(s.savedAt);
+      dateStr = d.toLocaleString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+    } catch(e) { dateStr = s.savedAt || ''; }
+    html += '<div class="saved-item">';
+    html += '<div class="info">';
+    html += '<div class="title-text">' + escHtml(s.title) + '</div>';
+    html += '<div class="date">' + escHtml(dateStr) + '</div>';
+    html += '</div>';
+    html += '<button class="load-btn" onclick="loadSavedItem(\'' + s.id + '\')">📂 読込</button>';
+    html += '<button class="del-btn" onclick="deleteSavedItem(\'' + s.id + '\')">🗑 削除</button>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
 function doSave(){
   var data = {
     version: "1.0",
@@ -3500,6 +3721,9 @@ function doReset(){
   loadS8FormFromState();
   bindS8Events();
   updateS8SVG();
+
+  // 保存一覧の初回描画
+  if (typeof renderSaveList === 'function') renderSaveList();
 })();
 </script>
 </body>
