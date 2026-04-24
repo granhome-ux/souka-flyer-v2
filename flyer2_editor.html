@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
 <title>空花チラシメーカー β (Editor)</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Kaku+Gothic+New:wght@900&display=swap" rel="stylesheet">
 <style>
   @font-face {
     font-family: 'RiiCookieR';
@@ -19,6 +20,15 @@
   .header{background:linear-gradient(135deg,#5a3e1b,#8b6914);color:#fff;padding:12px 16px}
   .header h1{font-size:17px;font-weight:900}
   .header p{font-size:10px;opacity:.8}
+  /* ===== ページ切替バー ===== */
+  .pg-switcher{display:flex;background:#5a3e1b;padding:0;position:sticky;top:0;z-index:20}
+  .pg-switcher button{flex:1;padding:12px 0;border:none;cursor:pointer;font-size:14px;font-weight:900;font-family:inherit;background:#5a3e1b;color:#e8d5b0;border-bottom:4px solid transparent}
+  .pg-switcher button.active{background:#8b6914;color:#fff;border-bottom-color:#f5e6c8}
+  /* ページ別表示/非表示（編集エリアとプレビュー両方）*/
+  .page-edit{display:none}
+  .page-edit.active{display:block}
+  .page-wrap{display:none}
+  .page-wrap.active{display:block}
   .tabs{display:flex;background:#fff;border-bottom:2px solid #e8e2d8;position:sticky;top:0;z-index:10}
   .tabs button{flex:1;padding:10px 0;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;background:#fff;color:#aaa;border-bottom:3px solid transparent}
   .tabs button.active{background:#faf8f4;color:#5a3e1b;border-bottom-color:#8b6914}
@@ -63,7 +73,10 @@
     .panel[data-panel="preview"] { display: block !important; }
     .preview-area { padding: 0 !important; background: #fff !important; min-height: 0 !important; margin: 0 !important; }
     .preview-area .hint { display: none !important; }
-    .flyer-wrap { width: 100vw !important; height: 100vh !important; max-width: none !important; aspect-ratio: 1754 / 1240 !important; box-shadow: none !important; margin: 0 !important; page-break-inside: avoid; }
+    .pg-switcher { display: none !important; }
+    /* 両面印刷: 全page-wrapを強制表示、1ページずつ改ページ */
+    .flyer-wrap, .page-wrap { display: block !important; width: 100vw !important; height: 100vh !important; max-width: none !important; aspect-ratio: 1754 / 1240 !important; box-shadow: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: always; }
+    .page-wrap[data-page="p2"], .flyer-wrap:last-child { page-break-after: auto; }
     .flyer { inset: 0 !important; }
   }
   .sec-edit fieldset{border:2px solid #c4a265;border-radius:10px;padding:14px 16px 16px;margin-bottom:12px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06)}
@@ -108,7 +121,11 @@
 <body>
 <div class="header">
   <h1>🌿 空花チラシメーカー（β）</h1>
-  <p>Editor - 2ページ目プロトタイプ / タブ骨格版</p>
+  <p>Editor - 1/2ページ統合版（両面印刷対応）</p>
+</div>
+<div class="pg-switcher" id="pg-switcher">
+  <button class="pg-btn" data-pg="p1">📄 1ページ目</button>
+  <button class="pg-btn active" data-pg="p2">🍎 2ページ目</button>
 </div>
 <div class="tabs" id="tabs">
   <button data-tab="edit" class="active">✏️ 入力</button>
@@ -120,6 +137,21 @@
 <!-- ========== 入力タブ ========== -->
 <div class="panel active" data-panel="edit">
   <div class="sec-edit">
+    <!-- ページ1 編集エリア -->
+    <div class="page-edit" data-page="p1">
+      <fieldset>
+        <legend>📄 1ページ目・営業案内（日付・時間のみ編集）</legend>
+        <p style="font-size:11px;color:#888;margin:4px 0 8px">1ページ目は背景画像に日付と営業時間を重ねる形式です。</p>
+        <label>日付（例: 2026年4月26日(土)）
+          <input type="text" id="p1-f-date" maxlength="24" placeholder="2026年4月26日(土)">
+        </label>
+        <label>営業時間（例: 14:00〜18:00）
+          <input type="text" id="p1-f-time" maxlength="24" placeholder="14:00〜18:00">
+        </label>
+      </fieldset>
+    </div>
+    <!-- ページ2 編集エリア（現状のsec-tabsと全fieldset） -->
+    <div class="page-edit active" data-page="p2">
     <div class="sec-tabs">
       <button class="sec-tab active" data-sec="s1">① 左上 目玉</button>
       <button class="sec-tab" data-sec="s2">② 右上 大特価</button>
@@ -375,6 +407,7 @@
       </div>
       <img id="s8-f-bottom-img-preview" class="preview-thumb" alt="下部イラストプレビュー">
     </fieldset>
+    </div><!-- /page-edit data-page="p2" -->
   </div>
 </div>
 
@@ -382,7 +415,19 @@
 <div class="panel" data-panel="preview">
   <div class="preview-area">
     <div class="hint">A4横（1754×1240px）/ 確認用スケール表示</div>
-    <div class="flyer-wrap">
+    <!-- ページ1 flyer-wrap -->
+    <div class="flyer-wrap page-wrap" data-page="p1">
+      <div class="flyer" style="background:url('images/bg/flyer1-bg.jpg') center/cover no-repeat"></div>
+      <svg class="content-svg" viewBox="0 0 1754 1240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <!-- 日付 (y+3 下移動): y 281→284 -->
+        <text id="p1-date" x="491" y="284" text-anchor="middle" font-size="31" font-weight="900" font-family="'Kaisei Decol','Zen Maru Gothic','Hiragino Maru Gothic ProN','Yu Gothic',sans-serif" fill="#f5e8cc" letter-spacing="0.62" stroke="#2a1a08" stroke-width="1.8" paint-order="stroke">2026年4月26日(土)</text>
+        <!-- 時間 2層スタック (y+3 下移動): y 400→403 -->
+        <text id="p1-time-outer" x="509" y="403" text-anchor="middle" font-size="86" font-weight="900" font-family="'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif" fill="#f5e8cc" letter-spacing="1.72" stroke="#f5e8cc" stroke-width="12" paint-order="stroke">14:00〜18:00</text>
+        <text id="p1-time-inner" x="509" y="403" text-anchor="middle" font-size="86" font-weight="900" font-family="'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif" fill="#2a1a08" letter-spacing="1.72" stroke="#2a1a08" stroke-width="2.5">14:00〜18:00</text>
+      </svg>
+    </div>
+    <!-- ページ2 flyer-wrap（既存）-->
+    <div class="flyer-wrap page-wrap active" data-page="p2">
       <div class="flyer"></div>
       <svg class="frame-svg" viewBox="0 0 1754 1240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <g stroke="#5C3317" stroke-width="3" fill="none">
@@ -1076,6 +1121,87 @@
     });
   }
 })();
+
+// ===== ページ切替（1/2ページ目）=====
+(function(){
+  var btns = document.querySelectorAll('.pg-switcher button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function(){
+      var pg = this.getAttribute('data-pg');
+      for (var j = 0; j < btns.length; j++) btns[j].classList.toggle('active', btns[j] === this);
+      // 編集エリアの切替
+      var pageEdits = document.querySelectorAll('.page-edit');
+      for (var k = 0; k < pageEdits.length; k++) pageEdits[k].classList.toggle('active', pageEdits[k].getAttribute('data-page') === pg);
+      // プレビューの切替
+      var pageWraps = document.querySelectorAll('.page-wrap');
+      for (var m = 0; m < pageWraps.length; m++) pageWraps[m].classList.toggle('active', pageWraps[m].getAttribute('data-page') === pg);
+    });
+  }
+})();
+
+// ===== ページ1 状態管理 =====
+var SEC_P1_DEFAULT = {
+  date: '2026年4月26日(土)',
+  time: '14:00〜18:00'
+};
+var P1 = Object.assign({}, SEC_P1_DEFAULT);
+
+function updateP1SVG() {
+  var dEl = document.getElementById('p1-date');
+  var tOuter = document.getElementById('p1-time-outer');
+  var tInner = document.getElementById('p1-time-inner');
+  // 日付: "YYYY年M月D日(曜)" パターンをパース、月と日の数字を 2em tspan でレンダリング
+  if (dEl) {
+    while (dEl.firstChild) dEl.removeChild(dEl.firstChild);
+    var dateStr = P1.date || '';
+    var m = dateStr.match(/^(.*?)(\d+)(月)(\d+)(日)(.*)$/);
+    if (m) {
+      var NS = 'http://www.w3.org/2000/svg';
+      dEl.appendChild(document.createTextNode(m[1]));
+      var tsM = document.createElementNS(NS, 'tspan');
+      tsM.setAttribute('font-size', '62'); // 2em × 1.2 = 31×2
+      tsM.textContent = m[2];
+      dEl.appendChild(tsM);
+      dEl.appendChild(document.createTextNode(m[3]));
+      var tsD = document.createElementNS(NS, 'tspan');
+      tsD.setAttribute('font-size', '62');
+      tsD.textContent = m[4];
+      dEl.appendChild(tsD);
+      dEl.appendChild(document.createTextNode(m[5] + m[6]));
+    } else {
+      dEl.textContent = dateStr;
+    }
+  }
+  // 時間: 2層同期
+  var tStr = P1.time || '';
+  if (tOuter) tOuter.textContent = tStr;
+  if (tInner) tInner.textContent = tStr;
+}
+
+function loadP1FormFromState() {
+  var d = document.getElementById('p1-f-date');
+  var t = document.getElementById('p1-f-time');
+  if (d) d.value = P1.date;
+  if (t) t.value = P1.time;
+}
+
+function applyP1FromForm() {
+  var d = document.getElementById('p1-f-date');
+  var t = document.getElementById('p1-f-time');
+  if (d) P1.date = d.value;
+  if (t) P1.time = t.value;
+  updateP1SVG();
+}
+
+function bindP1Events() {
+  var ids = ['p1-f-date','p1-f-time'];
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', applyP1FromForm);
+    el.addEventListener('change', applyP1FromForm);
+  });
+}
 
 // ===== ストレージキー =====
 var STORAGE_KEY = 'souka_flyer_v2_data';
@@ -3374,7 +3500,8 @@ function setAllSaves(saves) {
 
 function buildCurrentSaveData() {
   return {
-    version: "1.0",
+    version: "1.1",
+    p1: Object.assign({}, P1),
     sectors: {
       s1: Object.assign({}, S1),
       s2: Object.assign({}, S2),
@@ -3410,7 +3537,14 @@ function doSaveWithTitle() {
 }
 
 function applyLoadedData(d) {
-  if (!d || !d.sectors) return false;
+  if (!d) return false;
+  // ページ1 復元（version 1.1+ で p1 あり）
+  if (d.p1) {
+    if (typeof d.p1.date === 'string') P1.date = d.p1.date;
+    if (typeof d.p1.time === 'string') P1.time = d.p1.time;
+    loadP1FormFromState(); updateP1SVG();
+  }
+  if (!d.sectors) return true; // ページ2 データなし（p1のみの保存も許容）
   if (d.sectors.s1) {
     for (var k1 in SEC1_DEFAULT) { if (k1 in d.sectors.s1) S1[k1] = d.sectors.s1[k1]; }
     loadS1FormFromState(); updateS1SVG();
@@ -3622,12 +3756,15 @@ function doReset(){
     S5.footer = s5def.footer;
     for (var ri5 = 0; ri5 < 3; ri5++) S5.rows[ri5] = s5def.rows[ri5];
     for (var k8 in SEC8_DEFAULT) { S8[k8] = SEC8_DEFAULT[k8]; }
+    P1.date = SEC_P1_DEFAULT.date;
+    P1.time = SEC_P1_DEFAULT.time;
     loadS1FormFromState(); updateS1SVG();
     loadS2FormFromState(); updateS2SVG();
     loadS3FormFromState(); updateS3SVG();
     loadS4FormFromState(); updateS4SVG();
     loadS5FormFromState(); updateS5SVG();
     loadS8FormFromState(); updateS8SVG();
+    loadP1FormFromState(); updateP1SVG();
     alert('削除して初期値に戻しました');
   } catch(e) {
     alert('削除失敗: ' + e.message);
@@ -3721,6 +3858,11 @@ function doReset(){
   loadS8FormFromState();
   bindS8Events();
   updateS8SVG();
+
+  // ページ1 初期化
+  loadP1FormFromState();
+  bindP1Events();
+  updateP1SVG();
 
   // 保存一覧の初回描画
   if (typeof renderSaveList === 'function') renderSaveList();
