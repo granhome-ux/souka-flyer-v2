@@ -6,6 +6,14 @@
 <title>空花チラシメーカー β (Editor)</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Kaku+Gothic+New:wght@900&display=swap" rel="stylesheet">
+<script>
+  // ブラウザ検知: Firefox は SVG radialGradient を印刷可能、Chromium 系はバグで白抜け
+  (function(){
+    var ua = navigator.userAgent || '';
+    var isFirefox = ua.indexOf('Firefox') > -1 && ua.indexOf('Seamonkey') === -1;
+    document.documentElement.classList.add(isFirefox ? 'is-firefox' : 'is-chromium');
+  })();
+</script>
 <style>
   @font-face {
     font-family: 'RiiCookieR';
@@ -62,23 +70,57 @@
   .saved-item .load-btn:hover{background:#2980b9}
   .saved-item .del-btn{background:#e74c3c}
   .saved-item .del-btn:hover{background:#c0392b}
-  /* ===== 印刷用 CSS ===== */
+  /* セクター⑧ 印刷用スタック: 画面では隠す */
+  .s8-gloss-print { display: none; }
+  /* Firefox は radialGradient を印刷できるのでソリッド版は常に非表示、グラデ版を常に表示 */
+  .is-firefox .s8-gloss-print { display: none !important; }
+  .is-firefox .s8-gloss-screen { display: inline !important; }
+  /* ===== 印刷用 CSS（ネイティブ方式: 画面をそのまま印刷）===== */
   @media print {
+    /* Chromium系: 画面用グラデを隠し、印刷用ソリッドスタックに切替（radialGradient 印刷バグ回避） */
+    .is-chromium .s8-gloss-screen { display: none !important; }
+    .is-chromium .s8-gloss-print { display: inline !important; }
+    /* Firefox: グラデ版をそのまま印刷（スタックは使わない） */
+    .is-firefox .s8-gloss-screen { display: inline !important; }
+    .is-firefox .s8-gloss-print { display: none !important; }
     @page { size: A4 landscape; margin: 0; }
-    html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; height: auto !important; }
-    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    /* 編集UI・タブ・ヘッダー・入力/印刷/保存パネル は非表示 */
-    .header, .tabs, .panel[data-panel="edit"], .panel[data-panel="print"], .panel[data-panel="save"] { display: none !important; }
-    /* プレビューパネルを強制表示（現在タブに関係なく）*/
-    .panel[data-panel="preview"] { display: block !important; }
-    .preview-area { padding: 0 !important; background: #fff !important; min-height: 0 !important; margin: 0 !important; }
+    /* グラデ/背景/SVG fill を必ず印刷に反映 */
+    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; height: auto !important; width: auto !important; }
+    /* 隠す: ヘッダー/ページ切替/タブ/入力・印刷・保存パネル */
+    .header, .pg-switcher, .tabs,
+    .panel[data-panel="edit"],
+    .panel[data-panel="print"],
+    .panel[data-panel="save"] { display: none !important; }
+    /* 強制表示: プレビューパネル & その子 */
+    .panel[data-panel="preview"] { display: block !important; position: static !important; visibility: visible !important; opacity: 1 !important; }
+    .preview-area { display: block !important; padding: 0 !important; margin: 0 !important; background: #fff !important; min-height: 0 !important; overflow: visible !important; }
     .preview-area .hint { display: none !important; }
-    .pg-switcher { display: none !important; }
-    /* 両面印刷: 全page-wrapを強制表示、1ページずつ改ページ */
-    .flyer-wrap, .page-wrap { display: block !important; width: 100vw !important; height: 100vh !important; max-width: none !important; aspect-ratio: 1754 / 1240 !important; box-shadow: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: always; }
-    .page-wrap[data-page="p2"], .flyer-wrap:last-child { page-break-after: auto; }
-    .flyer { inset: 0 !important; }
+    /* .page-wrap の画面用「.active 以外は非表示」を上書き: 両ページとも表示 */
+    .page-wrap, .flyer-wrap, .page-wrap.active, .flyer-wrap.active {
+      display: block !important;
+      visibility: visible !important;
+      position: relative !important;
+      width: 297mm !important;
+      height: 210mm !important;
+      max-width: none !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      overflow: hidden !important;
+      aspect-ratio: auto !important;
+      page-break-inside: avoid !important;
+      page-break-after: always !important;
+      break-after: page !important;
+    }
+    .page-wrap:last-of-type, .flyer-wrap:last-of-type { page-break-after: auto !important; break-after: auto !important; }
+    .flyer { display: block !important; position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+    .frame-svg, .content-svg { display: block !important; position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
   }
+  /* ラスタライズコンテナは通常画面では非表示（旧方式残骸互換） */
+  #print-raster-container { display: none; }
   .sec-edit fieldset{border:2px solid #c4a265;border-radius:10px;padding:14px 16px 16px;margin-bottom:12px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06)}
   .sec-edit legend{font-size:13px;font-weight:900;color:#5a3e1b;padding:2px 10px;background:#faf8f4;border:1px solid #c4a265;border-radius:4px}
   .sec-edit label{display:block;margin:10px 0 0;font-size:12px;color:#5a3e1b;font-weight:700}
@@ -800,27 +842,54 @@
           <!--   文字: font-size=90 font-family=RiiCookieR text-anchor=middle -->
           <!--   中心X: 877 / 9文字 y=252,352,452,552,652,752,852,952        -->
           <!--   長音"ー": rect x=872 y=980 w=10 h=60 rx=3                   -->
-          <!--   今/週/の/メ/ニ/ュ/ー: fill=url(#orangeGloss) stroke=#5C3317 w=2 -->
+          <!--   今/週/の/メ/ニ/ュ/ー: fill=url(#orangeGloss) stroke=#5C3317 w=2 (画面用・原状のグラデ) -->
           <!--   直/売: fill=url(#textRed) filter=#crayon stroke=#3d1a10 w=1 -->
+          <!--   ※ 印刷用は .s8-gloss-print グループ（下部）で solid スタック、CSS で切替 -->
           <!-- ============================================================ -->
-          <text x="877" y="252" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
-          <text x="877" y="252" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
-          <text x="877" y="352" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
-          <text x="877" y="352" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
-          <text x="877" y="452" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
-          <text x="877" y="452" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+          <g class="s8-gloss-screen">
+            <text x="877" y="252" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+            <text x="877" y="252" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+            <text x="877" y="352" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+            <text x="877" y="352" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+            <text x="877" y="452" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+            <text x="877" y="452" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+            <text x="877" y="752" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+            <text x="877" y="752" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+            <text x="877" y="852" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+            <text x="877" y="852" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+            <text x="877" y="952" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+            <text x="877" y="952" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+            <rect x="872" y="980" width="10" height="60" fill="url(#orangeGloss)" rx="3" ry="3"/>
+            <rect x="872" y="980" width="10" height="60" fill="none" stroke="#5C3317" stroke-width="2" rx="3" ry="3"/>
+          </g>
+          <!-- 印刷用スタック（Chrome は SVG gradient fill を印刷できないためソリッド2層で代替） -->
+          <g class="s8-gloss-print">
+            <text x="877" y="252" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+            <text x="874" y="247" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+            <text x="877" y="252" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">今</text>
+            <text x="877" y="352" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+            <text x="874" y="347" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+            <text x="877" y="352" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">週</text>
+            <text x="877" y="452" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+            <text x="874" y="447" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+            <text x="877" y="452" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">の</text>
+            <text x="877" y="752" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+            <text x="874" y="747" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+            <text x="877" y="752" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
+            <text x="877" y="852" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+            <text x="874" y="847" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+            <text x="877" y="852" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
+            <text x="877" y="952" font-size="90" font-weight="normal" fill="#D06618" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+            <text x="874" y="947" font-size="90" font-weight="normal" fill="#FFE9C0" opacity="0.55" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+            <text x="877" y="952" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
+            <rect x="872" y="980" width="10" height="60" fill="#D06618" rx="3" ry="3"/>
+            <rect x="870" y="977" width="10" height="60" fill="#FFE9C0" opacity="0.55" rx="3" ry="3"/>
+            <rect x="872" y="980" width="10" height="60" fill="none" stroke="#5C3317" stroke-width="2" rx="3" ry="3"/>
+          </g>
           <text x="877" y="552" font-size="90" font-weight="normal" fill="url(#textRed)" filter="url(#crayon)" font-family="RiiCookieR, sans-serif" text-anchor="middle">直</text>
           <text x="877" y="552" font-size="90" font-weight="normal" fill="none" stroke="#3d1a10" stroke-width="1" font-family="RiiCookieR, sans-serif" text-anchor="middle">直</text>
           <text x="877" y="652" font-size="90" font-weight="normal" fill="url(#textRed)" filter="url(#crayon)" font-family="RiiCookieR, sans-serif" text-anchor="middle">売</text>
           <text x="877" y="652" font-size="90" font-weight="normal" fill="none" stroke="#3d1a10" stroke-width="1" font-family="RiiCookieR, sans-serif" text-anchor="middle">売</text>
-          <text x="877" y="752" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
-          <text x="877" y="752" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">メ</text>
-          <text x="877" y="852" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
-          <text x="877" y="852" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ニ</text>
-          <text x="877" y="952" font-size="90" font-weight="normal" fill="url(#orangeGloss)" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
-          <text x="877" y="952" font-size="90" font-weight="normal" fill="none" stroke="#5C3317" stroke-width="2" font-family="RiiCookieR, sans-serif" text-anchor="middle">ュ</text>
-          <rect x="872" y="980" width="10" height="60" fill="url(#orangeGloss)" rx="3" ry="3"/>
-          <rect x="872" y="980" width="10" height="60" fill="none" stroke="#5C3317" stroke-width="2" rx="3" ry="3"/>
         </g>
 
         <!-- ===== セクター⑧ 中央帯 下部イラスト [FIX] pos=(799,1037) size=156x156 rotate=-20@(877,1115) ===== -->
@@ -3461,28 +3530,58 @@ function bindS8Events() {
 }
 
 // ===== localStorage 保存/読込/リセット =====
-// ===== 印刷 =====
+// ===== 印刷（ネイティブ方式: 画面をそのまま印刷）=====
 function doPrint(){
-  // 動的位置（円・name-marker 等）を印刷前に再計算
+  // 動的位置を最新化
   try {
     if (typeof updateT3BPosition === 'function') updateT3BPosition();
     if (typeof updateCurrencyPosition === 'function') updateCurrencyPosition();
     if (typeof updateS2MainCurrencyPosition === 'function') updateS2MainCurrencyPosition();
     if (typeof updateS2SubRowPositions === 'function') updateS2SubRowPositions();
-    if (typeof updateS3RowCurrencyPosition === 'function') {
-      for (var r = 1; r <= 8; r++) updateS3RowCurrencyPosition(r);
-    }
-    if (typeof updateS4RowCurrencyPosition === 'function') {
-      for (var r4 = 1; r4 <= 3; r4++) updateS4RowCurrencyPosition(r4);
-    }
-    if (typeof updateS5RowCurrencyPosition === 'function') {
-      for (var r5 = 1; r5 <= 3; r5++) updateS5RowCurrencyPosition(r5);
-    }
-    if (typeof updateS5NameMarker === 'function') {
-      for (var m5 = 0; m5 < 3; m5++) updateS5NameMarker(m5);
-    }
+    if (typeof updateS3RowCurrencyPosition === 'function') { for (var r = 1; r <= 8; r++) updateS3RowCurrencyPosition(r); }
+    if (typeof updateS4RowCurrencyPosition === 'function') { for (var r4 = 1; r4 <= 3; r4++) updateS4RowCurrencyPosition(r4); }
+    if (typeof updateS5RowCurrencyPosition === 'function') { for (var r5 = 1; r5 <= 3; r5++) updateS5RowCurrencyPosition(r5); }
+    if (typeof updateS5NameMarker === 'function') { for (var m5 = 0; m5 < 3; m5++) updateS5NameMarker(m5); }
   } catch(e) {}
-  setTimeout(function(){ window.print(); }, 100);
+
+  // 印刷前に preview パネル & 両ページを強制表示（レイアウト確定のため）
+  var currentPanel = document.querySelector('.panel.active');
+  var previewPanel = document.querySelector('.panel[data-panel="preview"]');
+  var panelSwapped = false;
+  if (currentPanel !== previewPanel) {
+    if (currentPanel) currentPanel.classList.remove('active');
+    if (previewPanel) previewPanel.classList.add('active');
+    panelSwapped = true;
+  }
+  var wraps = document.querySelectorAll('.page-wrap');
+  var origActives = [];
+  wraps.forEach(function(w){
+    origActives.push(w.classList.contains('active'));
+    w.classList.add('active');
+  });
+
+  function restore(){
+    wraps.forEach(function(w, i){ if (!origActives[i]) w.classList.remove('active'); });
+    if (panelSwapped) {
+      if (previewPanel) previewPanel.classList.remove('active');
+      if (currentPanel) currentPanel.classList.add('active');
+    }
+  }
+
+  // フォントロード完了を待ってから印刷ダイアログを開く
+  var fontReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  fontReady.then(function(){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        window.print();
+        setTimeout(restore, 800);
+      });
+    });
+  });
+
+  // afterprint イベントでも復元（安全側）
+  var onAfter = function(){ restore(); window.removeEventListener('afterprint', onAfter); };
+  window.addEventListener('afterprint', onAfter);
 }
 
 // ===== 複数保存機能（タイトル付き、日時自動）=====
@@ -3868,5 +3967,8 @@ function doReset(){
   if (typeof renderSaveList === 'function') renderSaveList();
 })();
 </script>
+
+<!-- ラスタライズ印刷用コンテナ（通常は display:none、印刷時のみ表示）-->
+<div id="print-raster-container"></div>
 </body>
 </html>
