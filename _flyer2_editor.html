@@ -920,7 +920,10 @@
     </div>
     <div class="box">
       <h3>💡 推奨環境</h3>
-      <p>Chrome / Edge / Safari の最新版を推奨。<br>
+      <p><strong>推奨ブラウザ: Firefox 最新版</strong><br>
+      SVG グラデーション（セクター⑧など）が最も綺麗に印刷されます。<br><br>
+      <strong>動作可能環境: Chrome / Edge / Safari 最新版</strong><br>
+      一部の表現はソリッド代替で印刷されます。<br>
       文字のずれや背景が出ない場合は上記設定を再確認してください。</p>
     </div>
   </div>
@@ -3560,12 +3563,38 @@ function doPrint(){
     w.classList.add('active');
   });
 
+  var restored = false;
   function restore(){
+    if (restored) return;
+    restored = true;
     wraps.forEach(function(w, i){ if (!origActives[i]) w.classList.remove('active'); });
     if (panelSwapped) {
       if (previewPanel) previewPanel.classList.remove('active');
       if (currentPanel) currentPanel.classList.add('active');
     }
+  }
+
+  // 復元トリガ:
+  //   1) afterprint (デスクトップ & 一部モバイルで発火)
+  //   2) matchMedia('print') の change (印刷コンテキスト終了を確実に検知。モバイル対応)
+  //   3) 60秒の安全ネット (上記どちらも発火しなかった場合のみ)
+  // ※ スマホでは window.print() が非同期なため、短い setTimeout で復元すると
+  //   プレビュー表示中に DOM が書き換わり「一瞬出て閉じる」症状になる。
+  var onAfter = function(){ restore(); window.removeEventListener('afterprint', onAfter); };
+  window.addEventListener('afterprint', onAfter);
+
+  var mql = window.matchMedia ? window.matchMedia('print') : null;
+  var mqlListener = null;
+  if (mql) {
+    mqlListener = function(e){
+      if (!e.matches) {
+        restore();
+        if (mql.removeEventListener) mql.removeEventListener('change', mqlListener);
+        else if (mql.removeListener) mql.removeListener(mqlListener);
+      }
+    };
+    if (mql.addEventListener) mql.addEventListener('change', mqlListener);
+    else if (mql.addListener) mql.addListener(mqlListener);
   }
 
   // フォントロード完了を待ってから印刷ダイアログを開く
@@ -3574,14 +3603,11 @@ function doPrint(){
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         window.print();
-        setTimeout(restore, 800);
+        // 安全ネット: 60秒経っても復元されていなければ強制復元（通常は afterprint / matchMedia で先に復元される）
+        setTimeout(restore, 60000);
       });
     });
   });
-
-  // afterprint イベントでも復元（安全側）
-  var onAfter = function(){ restore(); window.removeEventListener('afterprint', onAfter); };
-  window.addEventListener('afterprint', onAfter);
 }
 
 // ===== 複数保存機能（タイトル付き、日時自動）=====
