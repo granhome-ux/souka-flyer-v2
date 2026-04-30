@@ -295,6 +295,10 @@
 
       <fieldset class="sub-fieldset">
         <legend>メイン価格</legend>
+        <label style="display:flex;align-items:center;gap:6px;font-weight:bold;margin-bottom:6px">
+          <input type="checkbox" id="s2-f-t4-visible" checked>
+          メイン価格を表示する
+        </label>
         <div class="row">
           <label style="flex:1">T4a 個数（3桁）
             <input type="number" id="s2-f-qtynum" min="0" max="999" placeholder="1">
@@ -1531,6 +1535,7 @@ var SEC2_DEFAULT = {
   t2_1_sub1: 'いちご品種色々',
   t2_2_sub2: '早い者勝ち！',
   t3a_name: 'いちご',
+  t4_visible: true,
   t4a_qty_num: 1,
   t4b_qty_unit: '',
   t4c_price_num: 300,
@@ -1686,6 +1691,11 @@ function updateS2SVG() {
   $id('s2-price-stroke').textContent = String(S2.t4c_price_num);
   $id('s2-currency').textContent = S2.t4d_currency || '';
 
+  var t4Display = (S2.t4_visible === false) ? 'none' : '';
+  $id('s2-price-fill').style.display = t4Display;
+  $id('s2-price-stroke').style.display = t4Display;
+  $id('s2-currency').style.display = t4Display;
+
   var subqtyShown = !(S2.t5a_sub_qty_num === null || S2.t5a_sub_qty_num === '' || isNaN(S2.t5a_sub_qty_num));
   $id('s2-subqty').textContent = subqtyShown ? (String(S2.t5a_sub_qty_num) + (S2.t5b_sub_qty_unit || '')) : '';
 
@@ -1773,6 +1783,7 @@ function updateS2MainCurrencyPosition() {
   var priceStroke = $id('s2-price-stroke');
   var currency = $id('s2-currency');
   if (!priceStroke || !currency) return;
+  if (S2.t4_visible === false) return;
   var priceX = 1290;
   var priceFontSize = 100;
   var widthPx = measureTextWidth(priceStroke, 0.6);
@@ -1815,6 +1826,8 @@ function loadS2FormFromState() {
   $id('s2-f-sub1').value = S2.t2_1_sub1;
   $id('s2-f-sub2').value = S2.t2_2_sub2;
   $id('s2-f-name').value = S2.t3a_name;
+
+  $id('s2-f-t4-visible').checked = (S2.t4_visible !== false);
 
   $id('s2-f-qtynum').value = S2.t4a_qty_num;
   if (QTY_UNITS.indexOf(S2.t4b_qty_unit) >= 0 || S2.t4b_qty_unit === '') {
@@ -1867,6 +1880,7 @@ function applyS2FromForm() {
   S2.t2_1_sub1 = $id('s2-f-sub1').value;
   S2.t2_2_sub2 = $id('s2-f-sub2').value;
   S2.t3a_name = $id('s2-f-name').value;
+  S2.t4_visible = $id('s2-f-t4-visible').checked;
   var qv = parseInt($id('s2-f-qtynum').value, 10);
   S2.t4a_qty_num = isNaN(qv) ? 0 : qv;
   S2.t4b_qty_unit = resolveS2QtyUnit();
@@ -1902,6 +1916,7 @@ function bindS2Events() {
   $id('s2-f-currency').addEventListener('change', function(){ updateS2CurrencyCustomVisibility(); applyS2FromForm(); });
   $id('s2-f-subqtyunit').addEventListener('change', function(){ updateS2SubQtyUnitCustomVisibility(); applyS2FromForm(); });
   $id('s2-f-subcurrency').addEventListener('change', function(){ updateS2SubCurrencyCustomVisibility(); applyS2FromForm(); });
+  $id('s2-f-t4-visible').addEventListener('change', applyS2FromForm);
 
   $id('s2-f-img-cat').addEventListener('change', function(){
     var cat = this.value;
